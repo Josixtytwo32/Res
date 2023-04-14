@@ -9,11 +9,13 @@ import java.lang.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
+
 public class MainWindow 
 {
     public Icon InventoryIcon;
     public Icon TransacIcon;
     public Icon BuyIcon;
+    public Icon UserIcon;
     public Icon LogOutIcon; 
     
  
@@ -43,16 +45,15 @@ public class MainWindow
             e.printStackTrace();
         }
         }
-    }
+        }
+    
     public void deletes(Object[][] vals, JTable table, JTextField... tf) {
-        String productcode = tf[0].getText();
-        String itemdescription = tf[1].getText();
-        int updateV = Integer.valueOf(tf[2].getText());
-        int cc =  Integer.valueOf("" + vals[0][3].toString());
+        String ProdCode = tf[0].getText();
         
-        if (!productcode.equals("") && !itemdescription.equals("")) {
+        
+        if (!ProdCode.equals("")) {
             try { 
-                String query = "update sql12600942.inventory set Quantity = '" + (cc - updateV) + "', Total = '" + ((float) updateV * Float.parseFloat(vals[0][4].toString())) + "' where ProductCode = '" + productcode + "';";
+                String query = "DELETE FROM inventory WHERE `inventory`.`ProductCode` = ProdCode";
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 System.out.println(query);
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
@@ -71,8 +72,6 @@ public class MainWindow
         }
         }
     }
-    
-    
     public Object[][] getTable() {
         String query = "select * from sql12600942.inventory;";
         
@@ -156,7 +155,8 @@ public class MainWindow
             
         return mainobj;
     }
-
+    
+    
     public Object[][] getTable(String cell, boolean is) {
         String query = "select * from sql12600942.inventory where ProductCode = '" + cell + "';";
         
@@ -199,7 +199,16 @@ public class MainWindow
         return mainobj;
     }
     
-    public MainWindow(Icon ii, Icon ti, Icon bi, Icon loi, JLabel acc) 
+    public int getRowByValue(JTable table, Object value, int column){
+        for(int i=0; i<table.getRowCount(); i++){
+            if(table.getValueAt(i, column).equals(value)){
+                return i;
+            }
+        }
+        return -1; // If the value is not found in any row
+    }
+    
+    public MainWindow(Icon ii, Icon ti, Icon bi, Icon ui, Icon loi, JLabel acc) 
     {
         JFrame root = new JFrame();
         JPanel panel = new JPanel();
@@ -208,10 +217,15 @@ public class MainWindow
         
         panel.setLayout(null);
         
+        
+        
+        // Inventory Section
+        
         JLabel green = new JLabel("");
         JLabel Inven = new JLabel("Inventory");
         JLabel Trans = new JLabel("Transaction");
         JLabel Buys = new JLabel("Buy");
+        JLabel Users = new JLabel("Users");
         JLabel OutLog = new JLabel("Log Out");
         JLabel Account = new JLabel(acc.getText());
         JLabel TypeOfMaterial = new JLabel("Type of Material");
@@ -223,6 +237,7 @@ public class MainWindow
         JButton Inventory = new JButton(ii);
         JButton Transac = new JButton(ti);
         JButton Buy = new JButton(bi);
+        JButton User = new JButton(ui);
         JButton LogOut = new JButton(loi);
         JButton AddNewItem = new JButton("Add new Item");
         JButton Update = new JButton("Update");
@@ -252,18 +267,25 @@ public class MainWindow
         Buys.setBounds(206,21,100,100);
         Buys.setOpaque(false);
         
+        Users.setFont(new Font("Arial", Font.BOLD, 10));
+        Users.setForeground(Color.WHITE);
+        Users.setBounds(281,21,100,100);
+        Users.setOpaque(false);
+        
         if (acc.getText().equals("Merchandiser"))
         {
         Account.setFont(new Font("Arial", Font.BOLD, 12));
         Account.setForeground(Color.WHITE);
         Account.setBounds(700,10,100,50);
         Account.setOpaque(false);
+        User.setVisible(false);
+        Users.setVisible(false);
         }
         else
         {
         Account.setFont(new Font("Arial", Font.BOLD, 15));
         Account.setForeground(Color.WHITE);
-        Account.setBounds(750,10,100,50);
+        Account.setBounds(700,10,100,50);
         Account.setOpaque(false);
         }
         
@@ -323,7 +345,7 @@ public class MainWindow
         
         JTable Lamisa = new JTable(); 
         Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"Product Code", "Category", "Item Description", "Quantity", "Price", "Total"}));
-        Lamisa.getColumnModel().getColumn(2).setPreferredWidth(240);
+        Lamisa.getColumnModel().getColumn(2).setPreferredWidth(220);
         JScrollPane MainLamisa = new JScrollPane(Lamisa); 
         MainLamisa.setBounds(30,160,830,220);
         AddNewItem.addActionListener(e ->
@@ -348,6 +370,8 @@ public class MainWindow
                 cdb.insertData(AddProductCodeBar.getText(),AddCategoryBar.getText(),AddItemDescriptionBar.getText(),Integer.valueOf(AddQuantityBar.getText()),Float.parseFloat(AddPriceBar.getText()),((float) Integer.valueOf(AddQuantityBar.getText())) * Float.parseFloat(AddPriceBar.getText()));
             }
             });
+        
+            
             
         ProductCode.setFont(new Font("Arial", Font.BOLD, 12));
         ProductCode.setForeground(Color.BLACK);
@@ -361,7 +385,7 @@ public class MainWindow
         JMenuItem Adapter = new JMenuItem("Adapter");
         JMenuItem Cement = new JMenuItem("Cement");
         JMenuItem Bar = new JMenuItem("Bar");
-        JComboBox Category = new JComboBox(new String[]{"All", "Cement", "Adapter", "Bar"});
+        JComboBox Category = new JComboBox(new String[]{"All", "Adapter", "Bar", "Cement", "Coupling", "Hardiflex", "Pipe", "Plywood", "Sheet"});
         Category.setFont(new Font("Arial", Font.BOLD, 12));
         Category.setBounds(520, 120, 120, 25);
         Category.addActionListener(new ActionListener() 
@@ -390,25 +414,31 @@ public class MainWindow
                 if (xd.length != 0) {
                     String name = (String) xd[0][2];
                     ItemDescriptionBar.setText(name);
-                    ProductCodeBar.transferFocus();
-                    ItemDescriptionBar.transferFocus();
                 }
             }
             
+            private void SearchBarKeyReleased(java.awt.event.KeyEvent evt){
+                DefaultTableModel model = (DefaultTableModel)Lamisa.getModel();
+                String search = SearchBar.getText();
+                TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(model);
+                Lamisa.setRowSorter(tr);
+                tr.setRowFilter(RowFilter.regexFilter(search));
+            }    
             public void removeUpdate(DocumentEvent e) {
                 Object[][] xd = getTable(ProductCodeBar.getText(), true);
                 if (xd.length != 0) {
                     String name = (String) xd[0][2];
                     ItemDescriptionBar.setText(name);
-                    ProductCodeBar.transferFocus();
-                    ItemDescriptionBar.transferFocus();
                 }
             }
             public void changedUpdate(DocumentEvent e) {
                 
             }
+            
+        
         });
-
+        
+        
         StockToAdd.setFont(new Font("Arial", Font.BOLD, 12));
         StockToAdd.setForeground(Color.BLACK);
         StockToAdd.setBounds(185,510,150,25);
@@ -436,12 +466,190 @@ public class MainWindow
                 int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
                 if (stat==0){
                 int rowIndex = Lamisa.getSelectedRow();
-
-                DefaultTableModel model = (DefaultTableModel)Lamisa.getModel();
-                model.removeRow(rowIndex);
+                
+                String value = Lamisa.getModel().getValueAt(rowIndex, 0).toString();
+            
+                
+                         String query = "DELETE FROM inventory WHERE `inventory`.`ProductCode` = '"+value+"'";
+                        try
+                        {
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                            Statement pst = con.createStatement();
+                            pst.executeUpdate(query);
+                            
+                            DefaultTableModel model = (DefaultTableModel)Lamisa.getModel();
+                            model.removeRow(rowIndex);
+                        }
+                        catch(ClassNotFoundException | SQLException ex){
+                            JOptionPane.showMessageDialog(null, "Error: "+ex);
+        
+                        }
+                       
+                
             }
         }
         });
+        
+        
+        
+        // Transaction Log Section
+        JTable TransactionLogTable = new JTable();
+        TransactionLogTable.setModel(new DefaultTableModel(getTable(), new String[]{"Transaction Code","Product Code", "Category", "Item Description", "Quantity", "Price", "Total"}));
+        TransactionLogTable.getColumnModel().getColumn(2).setPreferredWidth(220);
+        TransactionLogTable.setVisible(false);
+        JScrollPane TransacLogTable = new JScrollPane(TransactionLogTable); 
+        TransacLogTable.setVisible(false);
+        
+        // Buy Section
+        JLabel BuyProductCode = new JLabel("Product Code");
+        JLabel BuyItemDescription = new JLabel("Item Description");
+        JLabel BuyStock = new JLabel("Stock");
+        JLabel BuyPrice = new JLabel("Price");
+        JLabel BuyQuantity = new JLabel("Quantity");
+        
+        JTextField BuyFillUpBar = new JTextField();
+        JTextField BuyProductCodeBar = new JTextField();
+        JTextField BuyItemDescriptionBar = new JTextField();
+        JTextField BuyStockBar = new JTextField();
+        JTextField BuyPriceBar = new JTextField();
+        JTextField BuyQuantityBar = new JTextField();
+        
+        JButton BuyAdd = new JButton("Add");
+        JButton BuyCalculate = new JButton("Calculate");
+        JButton BuyRemove = new JButton("Remove");
+        
+        BuyFillUpBar.setBounds(70,150,285,25);
+        BuyFillUpBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        BuyFillUpBar.setHorizontalAlignment(SwingConstants.CENTER);
+        BuyFillUpBar.setOpaque(false);
+        BuyFillUpBar.setVisible(false);
+        
+        
+        BuyProductCode.setFont(new Font("Arial", Font.BOLD, 12));
+        BuyProductCode.setForeground(Color.BLACK);
+        BuyProductCode.setBounds(107,195,150,25);
+        BuyProductCode.setOpaque(false);
+        BuyProductCode.setVisible(false);
+        BuyProductCodeBar.setBounds(195,195,160,25);
+        BuyProductCodeBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        BuyProductCodeBar.setOpaque(false);
+        BuyProductCodeBar.setVisible(false);
+        
+        BuyItemDescription.setFont(new Font("Arial", Font.BOLD, 12));
+        BuyItemDescription.setForeground(Color.BLACK);
+        BuyItemDescription.setBounds(90,230,150,25);
+        BuyItemDescription.setOpaque(false);
+        BuyItemDescription.setVisible(false);
+        BuyItemDescriptionBar.setBounds(195,230,160,25);
+        BuyItemDescriptionBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        BuyItemDescriptionBar.setOpaque(false);
+        BuyItemDescriptionBar.setVisible(false);
+        
+        BuyStock.setFont(new Font("Arial", Font.BOLD, 12));
+        BuyStock.setForeground(Color.BLACK);
+        BuyStock.setBounds(153,265,150,25);
+        BuyStock.setOpaque(false);
+        BuyStock.setVisible(false);
+        BuyStockBar.setBounds(195,265,160,25);
+        BuyStockBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        BuyStockBar.setOpaque(false);
+        BuyStockBar.setVisible(false);
+        
+        BuyPrice.setFont(new Font("Arial", Font.BOLD, 12));
+        BuyPrice.setForeground(Color.BLACK);
+        BuyPrice.setBounds(156,300,150,25);
+        BuyPrice.setOpaque(false);
+        BuyPrice.setVisible(false);
+        BuyPriceBar.setBounds(195,300,160,25);
+        BuyPriceBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        BuyPriceBar.setOpaque(false);
+        BuyPriceBar.setVisible(false);
+        
+        ((AbstractDocument)BuyFillUpBar.getDocument()).addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                int i_ = getRowByValue(Lamisa, BuyFillUpBar.getText(), 0);
+                
+                if (i_ >= 0) {
+                    BuyProductCodeBar.setText(String.valueOf(Lamisa.getValueAt(i_, 0)));
+                    BuyItemDescriptionBar.setText(String.valueOf(Lamisa.getValueAt(i_, 2)));
+                    BuyStockBar.setText(String.valueOf(Lamisa.getValueAt(i_, 3)));
+                    BuyPriceBar.setText(String.valueOf(Lamisa.getValueAt(i_, 4)));
+                } else {
+                    BuyProductCodeBar.setText("");
+                    BuyItemDescriptionBar.setText("");
+                    BuyStockBar.setText("");
+                    BuyPriceBar.setText("");
+                }
+            }
+            
+            public void removeUpdate(DocumentEvent e) {
+               insertUpdate(e);
+            }
+            public void changedUpdate(DocumentEvent e) {
+                
+            }
+        });
+        
+        BuyQuantity.setFont(new Font("Arial", Font.BOLD, 12));
+        BuyQuantity.setForeground(Color.BLACK);
+        BuyQuantity.setBounds(138,335,150,25);
+        BuyQuantity.setOpaque(false);
+        BuyQuantity.setVisible(false);
+        BuyQuantityBar.setBounds(195,335,160,25);
+        BuyQuantityBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        BuyQuantityBar.setOpaque(false);
+        BuyQuantityBar.setVisible(false);
+        
+        BuyAdd.setBounds(70, 380, 80, 40);
+        BuyAdd.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        BuyAdd.setContentAreaFilled(false);
+        BuyAdd.setOpaque(false);
+        BuyAdd.setVisible(false);
+        
+        BuyCalculate.setBounds(173, 380, 80, 40);
+        BuyCalculate.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        BuyCalculate.setContentAreaFilled(false);
+        BuyCalculate.setOpaque(false);
+        BuyCalculate.setVisible(false);
+        
+        BuyRemove.setBounds(275, 380, 80, 40);
+        BuyRemove.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        BuyRemove.setContentAreaFilled(false);
+        BuyRemove.setOpaque(false);
+        BuyRemove.setVisible(false);
+        BuyRemove.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JPanel panel = new JPanel(new GridLayout(0, 1));
+                JTextField usernameField = new JTextField();
+                JPasswordField passwordField = new JPasswordField();
+                panel.add(new JLabel("Enter Supervisor Credentials:"));
+                panel.add(usernameField);
+                panel.add(new JLabel("Supervisor Password:"));
+                panel.add(passwordField);
+                int result = JOptionPane.showConfirmDialog(null, panel, "Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                    if (result == JOptionPane.OK_OPTION) {
+                    String username = usernameField.getText();
+                    String password = new String(passwordField.getPassword());
+                        if (username.equals("Supervisor") && password.equals("123")) {
+                        JOptionPane.showOptionDialog(null, "Login successful!", "Success", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
+                        } else {
+                        JOptionPane.showMessageDialog(null, "Incorrect Supervisor Credentials. Please try again.");
+                    }
+            }
+    }
+});
+        
+         // Users Account Section
+        JTable UserAccountsTable = new JTable();
+        UserAccountsTable.setModel(new DefaultTableModel(getTable(), new String[]{"Username","Passwd","AccType"}));
+        UserAccountsTable.getColumnModel().getColumn(2).setPreferredWidth(220);
+        UserAccountsTable.setVisible(false);
+        JScrollPane UserAndAccountsTable = new JScrollPane(UserAccountsTable);
+        UserAndAccountsTable.setBounds(400,130,440,250);
+        UserAndAccountsTable.setVisible(false);
+         
         
         Inventory.setBounds(30,15,50,50);
         Inventory.addActionListener(new ActionListener()
@@ -464,11 +672,120 @@ public class MainWindow
                 RemoveItem.setVisible(true);
                 Lamisa.setVisible(true);
                 MainLamisa.setVisible(true);
+                TransactionLogTable.setVisible(false);
+                TransacLogTable.setVisible(false);
+                BuyFillUpBar.setVisible(false);
+                BuyProductCode.setVisible(false);
+                BuyProductCodeBar.setVisible(false);
+                BuyItemDescription.setVisible(false);
+                BuyItemDescriptionBar.setVisible(false);
+                BuyStock.setVisible(false);
+                BuyStockBar.setVisible(false);
+                BuyPrice.setVisible(false);
+                BuyPriceBar.setVisible(false);
+                BuyQuantity.setVisible(false);
+                BuyQuantityBar.setVisible(false);
+                BuyAdd.setVisible(false);
+                BuyCalculate.setVisible(false);
+                BuyRemove.setVisible(false);
+                UserAccountsTable.setVisible(false);
+                UserAndAccountsTable.setVisible(false);
             }
         });
         
         Transac.setBounds(110,15,50,50);
         Transac.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                if (e.getSource() == Transac){
+                    TransacLogTable.setBounds(30,130,830,350);
+                }
+                AddNewItem.setVisible(false);
+                TypeOfMaterial.setVisible(false);
+                Category.setVisible(false);
+                Search.setVisible(false);
+                SearchBar.setVisible(false);
+                ItemDescription.setVisible(false);
+                ProductCode.setVisible(false);
+                ProductCodeBar.setVisible(false);
+                ItemDescriptionBar.setVisible(false);
+                StockToAdd.setVisible(false);
+                StockToAddBar.setVisible(false);
+                Update.setVisible(false);
+                RemoveItem.setVisible(false);
+                Lamisa.setVisible(false);
+                MainLamisa.setVisible(false);
+                TransactionLogTable.setVisible(true);
+                TransacLogTable.setVisible(true);
+                BuyFillUpBar.setVisible(false);
+                BuyProductCode.setVisible(false);
+                BuyProductCodeBar.setVisible(false);
+                BuyItemDescription.setVisible(false);
+                BuyItemDescriptionBar.setVisible(false);
+                BuyStock.setVisible(false);
+                BuyStockBar.setVisible(false);
+                BuyPrice.setVisible(false);
+                BuyPriceBar.setVisible(false);
+                BuyQuantity.setVisible(false);
+                BuyQuantityBar.setVisible(false);
+                BuyAdd.setVisible(false);
+                BuyCalculate.setVisible(false);
+                BuyRemove.setVisible(false);
+                UserAccountsTable.setVisible(false);
+                UserAndAccountsTable.setVisible(false);
+            }
+        });
+        
+        Buy.setBounds(190,15,50,50);
+        Buy.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                if (e.getSource() == Buy){
+                    TransacLogTable.setBounds(400,130,440,370);
+                }
+                AddNewItem.setVisible(false);
+                TypeOfMaterial.setVisible(false);
+                Category.setVisible(false);
+                Search.setVisible(false);
+                SearchBar.setVisible(false);
+                ItemDescription.setVisible(false);
+                ProductCode.setVisible(false);
+                ProductCodeBar.setVisible(false);
+                ItemDescriptionBar.setVisible(false);
+                StockToAdd.setVisible(false);
+                StockToAddBar.setVisible(false);
+                Update.setVisible(false);
+                RemoveItem.setVisible(false);
+                Lamisa.setVisible(false);
+                MainLamisa.setVisible(false);
+                TransactionLogTable.setVisible(true);
+                TransacLogTable.setVisible(true);
+                BuyFillUpBar.setVisible(true);
+                BuyProductCode.setVisible(true);
+                BuyProductCodeBar.setVisible(true);
+                BuyItemDescription.setVisible(true);
+                BuyItemDescriptionBar.setVisible(true);
+                BuyStock.setVisible(true);
+                BuyStockBar.setVisible(true);
+                BuyPrice.setVisible(true);
+                BuyPriceBar.setVisible(true);
+                BuyQuantity.setVisible(true);
+                BuyQuantityBar.setVisible(true);
+                BuyAdd.setVisible(true);
+                BuyCalculate.setVisible(true);
+                BuyRemove.setVisible(true);
+                UserAccountsTable.setVisible(false);
+                UserAndAccountsTable.setVisible(false);
+            }
+        });
+        
+        
+        User.setBounds(270,15,50,50);
+        User.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -488,43 +805,37 @@ public class MainWindow
                 RemoveItem.setVisible(false);
                 Lamisa.setVisible(false);
                 MainLamisa.setVisible(false);
+                TransactionLogTable.setVisible(false);
+                TransacLogTable.setVisible(false);
+                BuyFillUpBar.setVisible(false);
+                BuyProductCode.setVisible(false);
+                BuyProductCodeBar.setVisible(false);
+                BuyItemDescription.setVisible(false);
+                BuyItemDescriptionBar.setVisible(false);
+                BuyStock.setVisible(false);
+                BuyStockBar.setVisible(false);
+                BuyPrice.setVisible(false);
+                BuyPriceBar.setVisible(false);
+                BuyQuantity.setVisible(false);
+                BuyQuantityBar.setVisible(false);
+                BuyAdd.setVisible(false);
+                BuyCalculate.setVisible(false);
+                BuyRemove.setVisible(false);
+                UserAccountsTable.setVisible(true);
+                UserAndAccountsTable.setVisible(true);
             }
         });
-        
-        Buy.setBounds(190,15,50,50);
-        Buy.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                AddNewItem.setVisible(false);
-                TypeOfMaterial.setVisible(true);
-                Category.setVisible(true);
-                Search.setVisible(true);
-                SearchBar.setVisible(true);
-                ItemDescription.setVisible(false);
-                ProductCode.setVisible(false);
-                ProductCodeBar.setVisible(false);
-                ItemDescriptionBar.setVisible(false);
-                StockToAdd.setVisible(false);
-                StockToAddBar.setVisible(false);
-                Update.setVisible(false);
-                RemoveItem.setVisible(false);
-                Lamisa.setVisible(true);
-                MainLamisa.setVisible(true);
-
-            }
-        });
-        
         
         panel.add(Inven); 
         panel.add(Trans);
         panel.add(Buys);
+        panel.add(Users);
         panel.add(OutLog);
         panel.add(Account);
         panel.add(Inventory);
         panel.add(Transac);
         panel.add(Buy);
+        panel.add(User);
         panel.add(LogOut);
         panel.add(AddNewItem);
         panel.add(TypeOfMaterial);
@@ -542,11 +853,32 @@ public class MainWindow
         panel.add(green);
         panel.add(MainLamisa);
         
+        panel.add(TransactionLogTable);
+        panel.add(TransacLogTable);
+        
+        panel.add(BuyFillUpBar);
+        panel.add(BuyProductCode);
+        panel.add(BuyProductCodeBar);
+        panel.add(BuyItemDescription);
+        panel.add(BuyItemDescriptionBar);
+        panel.add(BuyPrice);
+        panel.add(BuyPriceBar);
+        panel.add(BuyStock);
+        panel.add(BuyStockBar);
+        panel.add(BuyQuantity);
+        panel.add(BuyQuantityBar);
+        panel.add(BuyAdd);
+        panel.add(BuyCalculate);
+        panel.add(BuyRemove);
+        
+        panel.add(UserAccountsTable);
+        panel.add(UserAndAccountsTable);
+        
         root.revalidate();
         root.repaint();
         
         root.add(panel);
-        root.setTitle("3E'S SIS");
+        root.setTitle("3E'S IMS");
         
         root.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         root.setSize(900, 600);
