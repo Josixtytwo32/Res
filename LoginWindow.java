@@ -60,6 +60,7 @@ public LoginWindow()
         Icon InventoryIcon = new ImageIcon(System.getProperty("user.dir") + File.separator + "Inventory.png");
         Icon TransacIcon = new ImageIcon(System.getProperty("user.dir") + File.separator + "Transac.png");
         Icon BuyIcon = new ImageIcon(System.getProperty("user.dir") + File.separator + "Buy.png");
+        Icon UserIcon = new ImageIcon(System.getProperty("user.dir") + File.separator + "User.png");
         Icon LogOutIcon = new ImageIcon(System.getProperty("user.dir") + File.separator + "LogOut.png");
         JPanel Panel = new JPanel();
         JLabel Green = new JLabel("3E's IMS", JLabel.CENTER);
@@ -73,7 +74,7 @@ public LoginWindow()
         JLabel Acc = new JLabel();
         
         JFrame Frame = new JFrame();
-        Frame.setTitle("3E'S SIS");
+        Frame.setTitle("3E'S IMS");
         ImageIcon Logo = new ImageIcon(System.getProperty("user.dir") + File.separator + "Logo.png");
         Frame.setIconImage(Logo.getImage());
         
@@ -136,7 +137,7 @@ public LoginWindow()
             public void actionPerformed(ActionEvent e) 
             {
                 Frame.dispose();
-                new MainWindow(InventoryIcon, TransacIcon, BuyIcon, LogOutIcon, Acc);
+                new MainWindow(InventoryIcon, TransacIcon, BuyIcon, UserIcon, LogOutIcon, Acc);
             }
         });
         
@@ -150,30 +151,6 @@ public LoginWindow()
             
             Error.setText("");
             Success.setText("");
-            if(user.equals(accs.get(0).get(0)) && password.equals(accs.get(0).get(1)))
-            {
-                Login.setVisible(false);
-                Login.setEnabled(false);
-                
-                Welcome.setVisible(true);
-                
-                Acc.setText("Owner");
-                Acc.setFont(new Font("Arial", Font.BOLD, 17));
-                Acc.setBounds(80, 215, 145, 35);
-                Acc.setVisible(true);
-                
-                Ok.setVisible(true);
-                Ok.requestFocusInWindow();
-                
-                userLabel.setVisible(false);
-                passwordLabel.setVisible(false);
-                userText.setVisible(false);
-                passwordText.setVisible(false);
-                
-                Success.setText("Log-in Successful");
-                userText.setText("");
-                passwordText.setText("");
-            } 
             if(user.equals(accs.get(0).get(0)) && password.equals(accs.get(0).get(1)))
             {
                 Login.setVisible(false);
@@ -205,9 +182,9 @@ public LoginWindow()
                 
                 Welcome.setVisible(true);
                 
-                Acc.setText("Admin");
+                Acc.setText("Supervisor");
                 Acc.setFont(new Font("Arial", Font.BOLD, 20));
-                Acc.setBounds(105, 215, 145, 35);
+                Acc.setBounds(80, 215, 145, 35);
                 Acc.setVisible(true);
                 
                 Ok.setVisible(true);
@@ -280,9 +257,9 @@ public LoginWindow()
                 
                 Welcome.setVisible(true);
                 
-                Acc.setText("Admin");
+                Acc.setText("Supervisor");
                 Acc.setFont(new Font("Arial", Font.BOLD, 20));
-                Acc.setBounds(105, 215, 145, 35);
+                Acc.setBounds(80, 215, 145, 35);
                 Acc.setVisible(true);
                 
                 Ok.setVisible(true);
