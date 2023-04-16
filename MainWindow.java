@@ -207,7 +207,86 @@ public class MainWindow
         }
         return -1; // If the value is not found in any row
     }
-    
+    public Object[][] getTabletrans() {
+        String query = "select * from sql12600942.transactionlog;";
+        
+        ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
+
+        int rowCount = 1;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                Statement pst = con.createStatement();
+                ResultSet rs = pst.executeQuery(query);
+                                
+                while (rs.next()) {
+                    ArrayList<Object> arry = new ArrayList<Object>();
+                    arry.add(rs.getInt("Transaction Code"));
+                    arry.add(rs.getString("Product Code"));
+                    arry.add(rs.getString("Category"));
+                    arry.add(rs.getString("Item Description"));
+                    arry.add(rs.getInt("Quantity"));
+                    arry.add(rs.getBigDecimal("Price"));
+                    arry.add(rs.getBigDecimal("Total"));
+                    
+                    arryB.add(arry);
+                }
+                
+               con.close();
+            }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+            
+        Object[][] mainobj = new Object[arryB.size()][7];
+        
+        for (int i = 0; i < arryB.size(); i++) {
+            for (int j = 0; j < arryB.get(i).size(); j++) {
+                mainobj[i][j] = arryB.get(i).get(j);
+            }
+        }
+            
+        return mainobj;
+        
+    }
+    public Object[][] getTableUser() {
+        String query = "select * from sql12600942.account;";
+        
+        ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
+
+        int rowCount = 1;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                Statement pst = con.createStatement();
+                ResultSet rs = pst.executeQuery(query);
+                                
+                while (rs.next()) {
+                    ArrayList<Object> arry = new ArrayList<Object>();
+                    
+                    arry.add(rs.getString("Username"));
+                    arry.add(rs.getString("Passwd"));
+                    arry.add(rs.getString("AccType"));
+                    
+                    arryB.add(arry);
+                }
+                
+               con.close();
+            }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+            
+        Object[][] mainobj = new Object[arryB.size()][3];
+        
+        for (int i = 0; i < arryB.size(); i++) {
+            for (int j = 0; j < arryB.get(i).size(); j++) {
+                mainobj[i][j] = arryB.get(i).get(j);
+            }
+        }
+            
+        return mainobj;
+    }
     public MainWindow(Icon ii, Icon ti, Icon bi, Icon ui, Icon loi, JLabel acc) 
     {
         JFrame root = new JFrame();
@@ -333,6 +412,7 @@ public class MainWindow
         SearchBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         SearchBar.setOpaque(false);
         
+        
         LogOut.setBounds(825,20,35,35);
         LogOut.addActionListener(new ActionListener() 
         {
@@ -371,7 +451,32 @@ public class MainWindow
             }
             });
         
+          SearchBar.addKeyListener(new KeyListener() {
             
+            DefaultTableModel model;
+            
+            public void search (String str){
+                model = (DefaultTableModel) Lamisa.getModel();
+                TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
+                Lamisa.setRowSorter(trs);
+                trs.setRowFilter(RowFilter.regexFilter("(?i)"+str));
+            }         
+            @Override
+            public void keyTyped(KeyEvent event) {
+                
+            }
+         
+            @Override
+            public void keyReleased(KeyEvent event) {
+               String searchString = SearchBar.getText();
+               search(searchString);
+            }
+         
+            @Override
+            public void keyPressed(KeyEvent event) {
+               
+            }
+        });  
             
         ProductCode.setFont(new Font("Arial", Font.BOLD, 12));
         ProductCode.setForeground(Color.BLACK);
@@ -408,7 +513,12 @@ public class MainWindow
         ItemDescriptionBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         ItemDescriptionBar.setOpaque(false);
         
+        
+        
         ((AbstractDocument)ProductCodeBar.getDocument()).addDocumentListener(new DocumentListener() {
+
+            
+            
             public void insertUpdate(DocumentEvent e) {
                 Object[][] xd = getTable(ProductCodeBar.getText(), true);
                 if (xd.length != 0) {
@@ -416,14 +526,8 @@ public class MainWindow
                     ItemDescriptionBar.setText(name);
                 }
             }
+           
             
-            private void SearchBarKeyReleased(java.awt.event.KeyEvent evt){
-                DefaultTableModel model = (DefaultTableModel)Lamisa.getModel();
-                String search = SearchBar.getText();
-                TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(model);
-                Lamisa.setRowSorter(tr);
-                tr.setRowFilter(RowFilter.regexFilter(search));
-            }    
             public void removeUpdate(DocumentEvent e) {
                 Object[][] xd = getTable(ProductCodeBar.getText(), true);
                 if (xd.length != 0) {
@@ -431,11 +535,13 @@ public class MainWindow
                     ItemDescriptionBar.setText(name);
                 }
             }
+            
             public void changedUpdate(DocumentEvent e) {
                 
             }
             
-        
+            
+           
         });
         
         
@@ -495,11 +601,11 @@ public class MainWindow
         
         // Transaction Log Section
         JTable TransactionLogTable = new JTable();
-        TransactionLogTable.setModel(new DefaultTableModel(getTable(), new String[]{"Transaction Code","Product Code", "Category", "Item Description", "Quantity", "Price", "Total"}));
+        TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Transaction Code","Product Code", "Category", "Item Description", "Quantity", "Price", "Total"}));
         TransactionLogTable.getColumnModel().getColumn(2).setPreferredWidth(220);
-        TransactionLogTable.setVisible(false);
+        TransactionLogTable.setVisible(true);
         JScrollPane TransacLogTable = new JScrollPane(TransactionLogTable); 
-        TransacLogTable.setVisible(false);
+        TransacLogTable.setVisible(true);
         
         // Buy Section
         JLabel BuyProductCode = new JLabel("Product Code");
@@ -643,12 +749,12 @@ public class MainWindow
         
          // Users Account Section
         JTable UserAccountsTable = new JTable();
-        UserAccountsTable.setModel(new DefaultTableModel(getTable(), new String[]{"Username","Passwd","AccType"}));
+        UserAccountsTable.setModel(new DefaultTableModel(getTableUser(), new String[]{"Username","Passwd","AccType"}));
         UserAccountsTable.getColumnModel().getColumn(2).setPreferredWidth(220);
-        UserAccountsTable.setVisible(false);
+        UserAccountsTable.setVisible(true);
         JScrollPane UserAndAccountsTable = new JScrollPane(UserAccountsTable);
         UserAndAccountsTable.setBounds(400,130,440,250);
-        UserAndAccountsTable.setVisible(false);
+        UserAndAccountsTable.setVisible(true);
          
         
         Inventory.setBounds(30,15,50,50);
