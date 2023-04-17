@@ -211,7 +211,7 @@ public class MainWindow
         String query = "select * from sql12600942.transactionlog;";
         
         ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
-
+        
         int rowCount = 1;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -350,23 +350,6 @@ public class MainWindow
         Users.setForeground(Color.WHITE);
         Users.setBounds(281,21,100,100);
         Users.setOpaque(false);
-        
-        if (acc.getText().equals("Merchandiser"))
-        {
-        Account.setFont(new Font("Arial", Font.BOLD, 12));
-        Account.setForeground(Color.WHITE);
-        Account.setBounds(700,10,100,50);
-        Account.setOpaque(false);
-        User.setVisible(false);
-        Users.setVisible(false);
-        }
-        else
-        {
-        Account.setFont(new Font("Arial", Font.BOLD, 15));
-        Account.setForeground(Color.WHITE);
-        Account.setBounds(700,10,100,50);
-        Account.setOpaque(false);
-        }
         
         OutLog.setFont(new Font("Arial", Font.BOLD, 10));
         OutLog.setForeground(Color.WHITE);
@@ -516,9 +499,6 @@ public class MainWindow
         
         
         ((AbstractDocument)ProductCodeBar.getDocument()).addDocumentListener(new DocumentListener() {
-
-            
-            
             public void insertUpdate(DocumentEvent e) {
                 Object[][] xd = getTable(ProductCodeBar.getText(), true);
                 if (xd.length != 0) {
@@ -526,8 +506,6 @@ public class MainWindow
                     ItemDescriptionBar.setText(name);
                 }
             }
-           
-            
             public void removeUpdate(DocumentEvent e) {
                 Object[][] xd = getTable(ProductCodeBar.getText(), true);
                 if (xd.length != 0) {
@@ -535,13 +513,9 @@ public class MainWindow
                     ItemDescriptionBar.setText(name);
                 }
             }
-            
             public void changedUpdate(DocumentEvent e) {
                 
             }
-            
-            
-           
         });
         
         
@@ -575,7 +549,6 @@ public class MainWindow
                 
                 String value = Lamisa.getModel().getValueAt(rowIndex, 0).toString();
             
-                
                          String query = "DELETE FROM inventory WHERE `inventory`.`ProductCode` = '"+value+"'";
                         try
                         {
@@ -591,8 +564,6 @@ public class MainWindow
                             JOptionPane.showMessageDialog(null, "Error: "+ex);
         
                         }
-                       
-                
             }
         }
         });
@@ -602,10 +573,10 @@ public class MainWindow
         // Transaction Log Section
         JTable TransactionLogTable = new JTable();
         TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Transaction Code","Product Code", "Category", "Item Description", "Quantity", "Price", "Total"}));
-        TransactionLogTable.getColumnModel().getColumn(2).setPreferredWidth(220);
-        TransactionLogTable.setVisible(true);
+        // TransactionLogTable.getColumnModel().getColumn(2).setPreferredWidth(220);
         JScrollPane TransacLogTable = new JScrollPane(TransactionLogTable); 
-        TransacLogTable.setVisible(true);
+        TransacLogTable.setBounds(30,130,830,350);
+        TransacLogTable.setVisible(false);
         
         // Buy Section
         JLabel BuyProductCode = new JLabel("Product Code");
@@ -724,38 +695,105 @@ public class MainWindow
         BuyRemove.setContentAreaFilled(false);
         BuyRemove.setOpaque(false);
         BuyRemove.setVisible(false);
-        BuyRemove.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JPanel panel = new JPanel(new GridLayout(0, 1));
-                JTextField usernameField = new JTextField();
-                JPasswordField passwordField = new JPasswordField();
-                panel.add(new JLabel("Enter Supervisor Credentials:"));
-                panel.add(usernameField);
-                panel.add(new JLabel("Supervisor Password:"));
-                panel.add(passwordField);
-                int result = JOptionPane.showConfirmDialog(null, panel, "Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                    if (result == JOptionPane.OK_OPTION) {
-                    String username = usernameField.getText();
-                    String password = new String(passwordField.getPassword());
-                        if (username.equals("Supervisor") && password.equals("123")) {
-                        JOptionPane.showOptionDialog(null, "Login successful!", "Success", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
-                        } else {
-                        JOptionPane.showMessageDialog(null, "Incorrect Supervisor Credentials. Please try again.");
-                    }
-            }
-    }
-});
         
          // Users Account Section
         JTable UserAccountsTable = new JTable();
         UserAccountsTable.setModel(new DefaultTableModel(getTableUser(), new String[]{"Username","Passwd","AccType"}));
-        UserAccountsTable.getColumnModel().getColumn(2).setPreferredWidth(220);
-        UserAccountsTable.setVisible(true);
+        //UserAccountsTable.getColumnModel().getColumn(2).setPreferredWidth(220);
         JScrollPane UserAndAccountsTable = new JScrollPane(UserAccountsTable);
         UserAndAccountsTable.setBounds(400,130,440,250);
-        UserAndAccountsTable.setVisible(true);
-         
+        UserAndAccountsTable.setVisible(false);
+        
+        JLabel UserUsername = new JLabel("Username");
+        JLabel UserPassword = new JLabel("Password");
+        JLabel UserAccountType = new JLabel("Account Type");
+        
+        JTextField UserUsernameBar = new JTextField();
+        JTextField UserPasswordBar = new JTextField();
+        JTextField UserAccountTypeBar = new JTextField();
+        
+        JButton UserNew = new JButton("New");
+        JButton UserDelete = new JButton("Delete");
+        
+        UserUsername.setFont(new Font("Arial", Font.BOLD, 12));
+        UserUsername.setForeground(Color.BLACK);
+        UserUsername.setBounds(107,150,150,25);
+        UserUsername.setOpaque(false);
+        UserUsername.setVisible(false);
+        UserUsernameBar.setBounds(205,150,160,25);
+        UserUsernameBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        UserUsernameBar.setOpaque(false);
+        UserUsernameBar.setVisible(false);
+        
+        UserPassword.setFont(new Font("Arial", Font.BOLD, 12));
+        UserPassword.setForeground(Color.BLACK);
+        UserPassword.setBounds(107,195,150,25);
+        UserPassword.setOpaque(false);
+        UserPassword.setVisible(false);
+        UserPasswordBar.setBounds(205,195,160,25);
+        UserPasswordBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        UserPasswordBar.setOpaque(false);
+        UserPasswordBar.setVisible(false);
+        
+        UserAccountType.setFont(new Font("Arial", Font.BOLD, 12));
+        UserAccountType.setForeground(Color.BLACK);
+        UserAccountType.setBounds(107,240,150,25);
+        UserAccountType.setOpaque(false);
+        UserAccountType.setVisible(false);
+        UserAccountTypeBar.setBounds(205,240,160,25);
+        UserAccountTypeBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        UserAccountTypeBar.setOpaque(false);
+        UserAccountTypeBar.setVisible(false);
+        
+        UserNew.setBounds(135, 300, 80, 40);
+        UserNew.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        UserNew.setContentAreaFilled(false);
+        UserNew.setOpaque(false);
+        UserNew.setVisible(false);
+        UserNew.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (!UserUsernameBar.getText().equals("") && !UserPasswordBar.getText().equals("") && !UserAccountTypeBar.getText().equals("")){
+                DefaultTableModel model = (DefaultTableModel) UserAccountsTable.getModel();
+                Object[] row = { UserUsernameBar.getText(), UserPassword.getText(), UserAccountTypeBar.getText()};
+                model.addRow(row);
+                
+                ConnectDB cdb=new ConnectDB();
+                cdb.UserAccountsTable(UserUsernameBar.getText(),UserPasswordBar.getText(),UserAccountTypeBar.getText());
+            }
+            }
+        });
+        
+        UserDelete.setBounds(257, 300, 80, 40);
+        UserDelete.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        UserDelete.setContentAreaFilled(false);
+        UserDelete.setOpaque(false);
+        UserDelete.setVisible(false);
+        UserDelete.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+                if (stat==0){
+                int rowIndex = UserAccountsTable.getSelectedRow();
+                
+                String value = UserAccountsTable.getModel().getValueAt(rowIndex, 0).toString();
+            
+                         String query = "DELETE FROM account WHERE `account`.`Username` = '"+value+"'";
+                        try
+                        {
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                            Statement pst = con.createStatement();
+                            pst.executeUpdate(query);
+                            
+                            DefaultTableModel model = (DefaultTableModel)UserAccountsTable.getModel();
+                            model.removeRow(rowIndex);
+                        }
+                        catch(ClassNotFoundException | SQLException ex){
+                            JOptionPane.showMessageDialog(null, "Error: "+ex);
+        
+                        }
+            }
+        }
+        });
         
         Inventory.setBounds(30,15,50,50);
         Inventory.addActionListener(new ActionListener()
@@ -778,7 +816,6 @@ public class MainWindow
                 RemoveItem.setVisible(true);
                 Lamisa.setVisible(true);
                 MainLamisa.setVisible(true);
-                TransactionLogTable.setVisible(false);
                 TransacLogTable.setVisible(false);
                 BuyFillUpBar.setVisible(false);
                 BuyProductCode.setVisible(false);
@@ -794,8 +831,15 @@ public class MainWindow
                 BuyAdd.setVisible(false);
                 BuyCalculate.setVisible(false);
                 BuyRemove.setVisible(false);
-                UserAccountsTable.setVisible(false);
                 UserAndAccountsTable.setVisible(false);
+                UserUsername.setVisible(false);
+                UserPassword.setVisible(false);
+                UserAccountType.setVisible(false);
+                UserUsernameBar.setVisible(false);
+                UserPasswordBar.setVisible(false);
+                UserAccountTypeBar.setVisible(false);
+                UserNew.setVisible(false);
+                UserDelete.setVisible(false);
             }
         });
         
@@ -823,7 +867,6 @@ public class MainWindow
                 RemoveItem.setVisible(false);
                 Lamisa.setVisible(false);
                 MainLamisa.setVisible(false);
-                TransactionLogTable.setVisible(true);
                 TransacLogTable.setVisible(true);
                 BuyFillUpBar.setVisible(false);
                 BuyProductCode.setVisible(false);
@@ -839,8 +882,15 @@ public class MainWindow
                 BuyAdd.setVisible(false);
                 BuyCalculate.setVisible(false);
                 BuyRemove.setVisible(false);
-                UserAccountsTable.setVisible(false);
                 UserAndAccountsTable.setVisible(false);
+                UserUsername.setVisible(false);
+                UserPassword.setVisible(false);
+                UserAccountType.setVisible(false);
+                UserUsernameBar.setVisible(false);
+                UserPasswordBar.setVisible(false);
+                UserAccountTypeBar.setVisible(false);
+                UserNew.setVisible(false);
+                UserDelete.setVisible(false);
             }
         });
         
@@ -868,7 +918,6 @@ public class MainWindow
                 RemoveItem.setVisible(false);
                 Lamisa.setVisible(false);
                 MainLamisa.setVisible(false);
-                TransactionLogTable.setVisible(true);
                 TransacLogTable.setVisible(true);
                 BuyFillUpBar.setVisible(true);
                 BuyProductCode.setVisible(true);
@@ -884,8 +933,15 @@ public class MainWindow
                 BuyAdd.setVisible(true);
                 BuyCalculate.setVisible(true);
                 BuyRemove.setVisible(true);
-                UserAccountsTable.setVisible(false);
                 UserAndAccountsTable.setVisible(false);
+                UserUsername.setVisible(false);
+                UserPassword.setVisible(false);
+                UserAccountType.setVisible(false);
+                UserUsernameBar.setVisible(false);
+                UserPasswordBar.setVisible(false);
+                UserAccountTypeBar.setVisible(false);
+                UserNew.setVisible(false);
+                UserDelete.setVisible(false);
             }
         });
         
@@ -911,7 +967,6 @@ public class MainWindow
                 RemoveItem.setVisible(false);
                 Lamisa.setVisible(false);
                 MainLamisa.setVisible(false);
-                TransactionLogTable.setVisible(false);
                 TransacLogTable.setVisible(false);
                 BuyFillUpBar.setVisible(false);
                 BuyProductCode.setVisible(false);
@@ -927,10 +982,58 @@ public class MainWindow
                 BuyAdd.setVisible(false);
                 BuyCalculate.setVisible(false);
                 BuyRemove.setVisible(false);
-                UserAccountsTable.setVisible(true);
                 UserAndAccountsTable.setVisible(true);
+                UserUsername.setVisible(true);
+                UserPassword.setVisible(true);
+                UserAccountType.setVisible(true);
+                UserUsernameBar.setVisible(true);
+                UserPasswordBar.setVisible(true);
+                UserAccountTypeBar.setVisible(true);
+                UserNew.setVisible(true);
+                UserDelete.setVisible(true);
             }
         });
+        
+        // Conditioning of accounts
+        if (acc.getText().equals("Merchandiser"))
+        {
+        Account.setFont(new Font("Arial", Font.BOLD, 12));
+        Account.setForeground(Color.WHITE);
+        Account.setBounds(700,10,100,50);
+        Account.setOpaque(false);
+        User.setVisible(false);
+        Users.setVisible(false);
+        BuyRemove.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JPanel panel = new JPanel(new GridLayout(0, 1));
+                JTextField usernameField = new JTextField();
+                JPasswordField passwordField = new JPasswordField();
+                panel.add(new JLabel("Enter Supervisor Credentials:"));
+                panel.add(usernameField);
+                panel.add(new JLabel("Supervisor Password:"));
+                panel.add(passwordField);
+                int result = JOptionPane.showConfirmDialog(null, panel, "Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                    if (result == JOptionPane.OK_OPTION) {
+                    String username = usernameField.getText();
+                    String password = new String(passwordField.getPassword());
+                        if (username.equals("Supervisor") && password.equals("123")) {
+                        JOptionPane.showOptionDialog(null, "Login successful!", "Success", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
+                        } else {
+                        JOptionPane.showMessageDialog(null, "Incorrect Supervisor Credentials. Please try again.");
+                    }
+                }
+            }
+        });
+        }
+        else
+        {
+        Account.setFont(new Font("Arial", Font.BOLD, 15));
+        Account.setForeground(Color.WHITE);
+        Account.setBounds(700,10,100,50);
+        Account.setOpaque(false);
+        }
+        
         
         panel.add(Inven); 
         panel.add(Trans);
@@ -959,7 +1062,6 @@ public class MainWindow
         panel.add(green);
         panel.add(MainLamisa);
         
-        panel.add(TransactionLogTable);
         panel.add(TransacLogTable);
         
         panel.add(BuyFillUpBar);
@@ -977,8 +1079,16 @@ public class MainWindow
         panel.add(BuyCalculate);
         panel.add(BuyRemove);
         
-        panel.add(UserAccountsTable);
         panel.add(UserAndAccountsTable);
+        panel.add(UserUsername);
+        panel.add(UserPassword);
+        panel.add(UserAccountType);
+        panel.add(UserUsernameBar);
+        panel.add(UserPasswordBar);
+        panel.add(UserAccountTypeBar);
+        panel.add(UserNew);
+        panel.add(UserDelete);        
+        
         
         root.revalidate();
         root.repaint();
