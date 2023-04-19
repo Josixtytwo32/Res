@@ -27,9 +27,8 @@ public class MainWindow
         
         if (!productcode.equals("") && !itemdescription.equals("")) {
             try { 
-                String query = "update sql12600942.inventory set Quantity = '" + (cc + updateV) + "', Total = '" + ((float) updateV * Float.parseFloat(vals[0][4].toString())) + "' where ProductCode = '" + productcode + "';";
+                String query = "update sql12600942.inventory set Quantity = '" + (cc + updateV) + "', Total = '" + ((float) (cc + updateV) * Float.parseFloat(vals[0][4].toString())) + "' where ProductCode = '" + productcode + "';";
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                System.out.println(query);
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
                 Statement pst = con.createStatement();
                 pst.executeUpdate(query);
@@ -159,7 +158,6 @@ public class MainWindow
     
     public Object[][] getTable(String cell, boolean is) {
         String query = "select * from sql12600942.inventory where ProductCode = '" + cell + "';";
-        
         ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
 
         int rowCount = 1;
@@ -593,8 +591,37 @@ public class MainWindow
         JTextField BuyQuantityBar = new JTextField();
         
         JButton BuyAdd = new JButton("Add");
+        
+        
+        
         JButton BuyCalculate = new JButton("Calculate");
         JButton BuyRemove = new JButton("Remove");
+        BuyRemove.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+                if (stat==0){
+                int rowIndex = TransactionLogTable.getSelectedRow();
+                
+                String value = TransactionLogTable.getModel().getValueAt(rowIndex, 0).toString();
+            
+                         String query = "DELETE FROM transactionlog WHERE `transactionlog`.`Transaction Code` = '"+value+"'";
+                        try
+                        {
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                            Statement pst = con.createStatement();
+                            pst.executeUpdate(query);
+                            
+                            DefaultTableModel model = (DefaultTableModel)TransactionLogTable.getModel();
+                            model.removeRow(rowIndex);
+                        }
+                        catch(ClassNotFoundException | SQLException ex){
+                            JOptionPane.showMessageDialog(null, "Error: "+ex);
+        
+                        }
+            }
+        }
+        });
         
         BuyFillUpBar.setBounds(70,150,285,25);
         BuyFillUpBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -646,7 +673,7 @@ public class MainWindow
         ((AbstractDocument)BuyFillUpBar.getDocument()).addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 int i_ = getRowByValue(Lamisa, BuyFillUpBar.getText(), 0);
-                
+                System.out.println(i_);
                 if (i_ >= 0) {
                     BuyProductCodeBar.setText(String.valueOf(Lamisa.getValueAt(i_, 0)));
                     BuyItemDescriptionBar.setText(String.valueOf(Lamisa.getValueAt(i_, 2)));
@@ -664,7 +691,7 @@ public class MainWindow
                insertUpdate(e);
             }
             public void changedUpdate(DocumentEvent e) {
-                
+                System.out.println(e);
             }
         });
         
@@ -744,6 +771,8 @@ public class MainWindow
         UserAccountTypeBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         UserAccountTypeBar.setOpaque(false);
         UserAccountTypeBar.setVisible(false);
+    
+       
         
         UserNew.setBounds(135, 300, 80, 40);
         UserNew.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
