@@ -40,10 +40,30 @@ public class ConnectDB{
             JOptionPane.showMessageDialog(null, "Error: "+ex);
         }
     }
+    
+    public void UserAccountsTable (String Username, String Passwd, String AccType){
+        String query;
+        try{
+            query = "INSERT INTO `account`(`Username`, `Passwd`, `AccType`) VALUES ('"+Username+"','"+Passwd+"', '"+AccType+"' )";          
+            st.executeUpdate(query);
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error: "+ex);
+        }
+    }   
+    public void Buy ( String ProductCode, String Category, String ItemDescription, int Quantity, float Price, float Total){
+        String query;
+        try{
+            query = "INSERT INTO `transactionlog` (`Transaction Code`, `Product Code`, `Category`, `Item Description`, `Quantity`, `Price`, `Total`) VALUES ( NULL, '"+ProductCode+"' , '"+Category+"', '"+ItemDescription+"', "+Quantity+", "+Price+", "+Total+")";
+            
+            st.executeUpdate(query);
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error: "+ex);
+        }
+    }
     public static void main(String args[])
     {
-        ConnectDB cdb=new ConnectDB();
-    
+        ConnectDB cdb=new ConnectDB();  
+        
     }
         
 }
