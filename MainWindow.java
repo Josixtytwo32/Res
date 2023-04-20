@@ -199,7 +199,8 @@ public class MainWindow
     
     public int getRowByValue(JTable table, Object value, int column){
         for(int i=0; i<table.getRowCount(); i++){
-            if(table.getValueAt(i, column).equals(value)){
+            //if(table.getValueAt(i, column).equals(value)){
+            if(table.getValueAt(i, column).toString().equalsIgnoreCase(value.toString())){
                 return i;
             }
         }
@@ -309,7 +310,7 @@ public class MainWindow
         JLabel Search = new JLabel("Search:");
         JLabel ProductCode = new JLabel("Product Code:");
         JLabel ItemDescription = new JLabel("Item Description:");
-        JLabel StockToAdd = new JLabel("Stock to Add:");
+        JLabel StockToAdd = new JLabel("Quantity to Add:");
         
         JButton Inventory = new JButton(ii);
         JButton Transac = new JButton(ti);
@@ -493,9 +494,7 @@ public class MainWindow
         ItemDescriptionBar.setBounds(265,470,150,25);
         ItemDescriptionBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         ItemDescriptionBar.setOpaque(false);
-        
-        
-        
+    
         ((AbstractDocument)ProductCodeBar.getDocument()).addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 Object[][] xd = getTable(ProductCodeBar.getText(), true);
@@ -519,7 +518,7 @@ public class MainWindow
         
         StockToAdd.setFont(new Font("Arial", Font.BOLD, 12));
         StockToAdd.setForeground(Color.BLACK);
-        StockToAdd.setBounds(185,510,150,25);
+        StockToAdd.setBounds(168,510,150,25);
         StockToAdd.setOpaque(false);
         StockToAddBar.setBounds(265,510,150,25);
         StockToAddBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -567,7 +566,6 @@ public class MainWindow
         });
         
         
-        
         // Transaction Log Section
         JTable TransactionLogTable = new JTable();
         TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Transaction Code","Product Code", "Category", "Item Description", "Quantity", "Price", "Total"}));
@@ -592,9 +590,25 @@ public class MainWindow
         
         JButton BuyAdd = new JButton("Add");
         
-        
+        BuyAdd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+             
+            
+            if (!BuyFillUpBar.getText().equals("") && !BuyProductCodeBar.getText().equals("") && !BuyItemDescriptionBar.getText().equals("") && !BuyStockBar.getText().equals("") && !BuyPriceBar.getText().equals("") && !BuyQuantityBar.getText().equals("")){
+                DefaultTableModel model = (DefaultTableModel) TransactionLogTable.getModel();
+                Object[] row = { BuyFillUpBar.getText(), BuyProductCodeBar.getText(), BuyItemDescriptionBar.getText(), BuyStockBar.getText(), BuyPriceBar.getText(), 
+                                ((float) Integer.valueOf(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()) };
+                model.addRow(row);
+                
+                ConnectDB cdb=new ConnectDB();
+                
+                cdb.Buy(BuyProductCodeBar.getText(), "", BuyItemDescriptionBar.getText(), Integer.valueOf(BuyQuantityBar.getText()), Float.parseFloat(BuyPriceBar.getText()), ((float) Integer.valueOf(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()));
+            }       
+            }
+        });
         
         JButton BuyCalculate = new JButton("Calculate");
+        
         JButton BuyRemove = new JButton("Remove");
         BuyRemove.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
@@ -604,7 +618,7 @@ public class MainWindow
                 
                 String value = TransactionLogTable.getModel().getValueAt(rowIndex, 0).toString();
             
-                         String query = "DELETE FROM transactionlog WHERE `transactionlog`.`Transaction Code` = '"+value+"'";
+                        String query = "DELETE FROM transactionlog WHERE `transactionlog`.`Transaction Code` = '"+value+"'";
                         try
                         {
                             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -673,7 +687,7 @@ public class MainWindow
         ((AbstractDocument)BuyFillUpBar.getDocument()).addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 int i_ = getRowByValue(Lamisa, BuyFillUpBar.getText(), 0);
-                System.out.println(i_);
+                
                 if (i_ >= 0) {
                     BuyProductCodeBar.setText(String.valueOf(Lamisa.getValueAt(i_, 0)));
                     BuyItemDescriptionBar.setText(String.valueOf(Lamisa.getValueAt(i_, 2)));
@@ -773,7 +787,6 @@ public class MainWindow
         UserAccountTypeBar.setVisible(false);
     
        
-        
         UserNew.setBounds(135, 300, 80, 40);
         UserNew.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         UserNew.setContentAreaFilled(false);
@@ -1026,15 +1039,15 @@ public class MainWindow
         // Conditioning of accounts
         if (acc.getText().equals("Merchandiser"))
         {
-        Account.setFont(new Font("Arial", Font.BOLD, 12));
-        Account.setForeground(Color.WHITE);
-        Account.setBounds(700,10,100,50);
-        Account.setOpaque(false);
-        User.setVisible(false);
-        Users.setVisible(false);
-        BuyRemove.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            Account.setFont(new Font("Arial", Font.BOLD, 12));
+            Account.setForeground(Color.WHITE);
+            Account.setBounds(700,10,100,50);
+            Account.setOpaque(false);
+            User.setVisible(false);
+            Users.setVisible(false);
+            BuyRemove.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
                 JPanel panel = new JPanel(new GridLayout(0, 1));
                 JTextField usernameField = new JTextField();
                 JPasswordField passwordField = new JPasswordField();
