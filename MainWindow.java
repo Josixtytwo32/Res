@@ -222,7 +222,6 @@ public class MainWindow
                     ArrayList<Object> arry = new ArrayList<Object>();
                     arry.add(rs.getInt("Transaction Code"));
                     arry.add(rs.getString("Product Code"));
-                    arry.add(rs.getString("Category"));
                     arry.add(rs.getString("Item Description"));
                     arry.add(rs.getInt("Quantity"));
                     arry.add(rs.getBigDecimal("Price"));
@@ -568,7 +567,7 @@ public class MainWindow
         
         // Transaction Log Section
         JTable TransactionLogTable = new JTable();
-        TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Transaction Code","Product Code", "Category", "Item Description", "Quantity", "Price", "Total"}));
+        TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Transaction Code","Product Code", "Item Description", "Quantity", "Price", "Total"}));
         // TransactionLogTable.getColumnModel().getColumn(2).setPreferredWidth(220);
         JScrollPane TransacLogTable = new JScrollPane(TransactionLogTable); 
         TransacLogTable.setBounds(30,130,830,350);
@@ -602,12 +601,60 @@ public class MainWindow
                 
                 ConnectDB cdb=new ConnectDB();
                 
-                cdb.Buy(BuyProductCodeBar.getText(), "", BuyItemDescriptionBar.getText(), Integer.valueOf(BuyQuantityBar.getText()), Float.parseFloat(BuyPriceBar.getText()), ((float) Integer.valueOf(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()));
+                cdb.Buy(BuyProductCodeBar.getText(), BuyItemDescriptionBar.getText(), Integer.valueOf(BuyQuantityBar.getText()), Float.parseFloat(BuyPriceBar.getText()), ((float) Integer.valueOf(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()));
             }       
             }
         });
         
         JButton BuyCalculate = new JButton("Calculate");
+        
+        BuyCalculate.addActionListener(e -> {
+            JLabel TotalAmount = new JLabel("Total amount:");
+            JTextField TotalAmountBar = new JTextField();
+            
+            JLabel AmountPaid = new JLabel("Amount paid:");
+            JTextField AmountPaidBar = new JTextField();
+            
+            JLabel ChangeLabel = new JLabel("Change:");
+            JTextField ChangeBar = new JTextField();
+            ChangeBar.setEditable(false);
+            
+            Object[] fields = {TotalAmount, TotalAmountBar, AmountPaid, AmountPaidBar, ChangeLabel, ChangeBar};
+            JOptionPane pane = new JOptionPane(fields, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null, new Object[]{"Ok"});
+            
+            AmountPaidBar.getDocument().addDocumentListener(new DocumentListener() {
+                int rowIndex = TransactionLogTable.getSelectedRow();
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    updateChange();
+                    DefaultTableModel model = (DefaultTableModel)TransactionLogTable.getModel();
+                            model.setRowCount(0);
+                }
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    updateChange();
+                }
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    updateChange();
+                }
+                private void updateChange() {
+                    try {
+                    double totalAmount = Double.parseDouble(TotalAmountBar.getText());
+                    double amountPaid = Double.parseDouble(AmountPaidBar.getText());
+                    double change = amountPaid - totalAmount;
+                    ChangeBar.setText(String.format("₱ %.2f", change));
+                } catch (NumberFormatException ex) {
+                    // ignore invalid input
+                }
+                }
+            });
+        
+            JDialog dialog = pane.createDialog(null, "Change Calculator");
+            dialog.setVisible(true);
+            dialog.dispose();
+        });
+        
         
         JButton BuyRemove = new JButton("Remove");
         BuyRemove.addActionListener(new ActionListener(){
