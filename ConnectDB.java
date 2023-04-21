@@ -25,7 +25,7 @@ public class ConnectDB{
     {
         String query;
         try{
-            query = "INSERT INTO `inventory`(`ProductCode`, `Category`, `Item Description`, `Quantity`, `Price`, `Total`) VALUES ('"+prdcode+"','"+categ+"','"+itemdes+"',"+quant+","+price+","+total+")";
+            query = "INSERT INTO `inventory`(`ProductCode`, `Product Category`, `Item Description`, `Quantity`, `Unit Price`, `Amount`) VALUES ('"+prdcode+"','"+categ+"','"+itemdes+"',"+quant+","+price+","+total+")";
             st.executeUpdate(query);
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Error: "+ex);
@@ -34,13 +34,12 @@ public class ConnectDB{
     public void Transaclog (int TransactionCode, String ProductCode, String Category, String ItemDescription, int Quantity, float Price, float Total){
         String query;
         try{
-            query = "INSERT INTO 'transactionlog' ('Trancsaction Code', 'Product Code', 'Category', 'Item Description', ' Quantity', 'Price', 'Total')VALUES('"+TransactionCode+"', '"+ProductCode+"' , '"+Category+"', '"+ItemDescription+"', "+Quantity+", "+Price+", "+Total+")";
+            query = "INSERT INTO 'transactionlog' ('Trancsaction Code', 'Product Code', 'Product Category', 'Item Description', ' Quantity', 'Unit Price', 'Amount')VALUES('"+TransactionCode+"', '"+ProductCode+"' , '"+Category+"', '"+ItemDescription+"', "+Quantity+", "+Price+", "+Total+")";
             st.executeUpdate(query);
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Error: "+ex);
         }
     }
-    
     public void UserAccountsTable (String Username, String Passwd, String AccType){
         String query;
         try{
@@ -53,7 +52,7 @@ public class ConnectDB{
     public void Buy ( String ProductCode, String ItemDescription, int Quantity, float Price, float Total){
         String query;
         try{
-            query = "INSERT INTO `transactionlog`(`Transaction Code`, `Product Code`, `Item Description`, `Quantity`, `Price`, `Total`) VALUES ( NULL, '"+ProductCode+"' , '"+ItemDescription+"', "+Quantity+", "+Price+", "+Total+")";
+            query = "INSERT INTO `transactionlog`(`Transaction Code`, `Product Code`, `Item Description`, `Quantity`, `Unit Price`, `Amount`) VALUES ( NULL, '"+ProductCode+"' , '"+ItemDescription+"', "+Quantity+", "+Price+", "+Total+")";
             
             st.executeUpdate(query);
         }catch(SQLException ex){
