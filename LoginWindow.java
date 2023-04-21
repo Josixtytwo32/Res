@@ -160,7 +160,7 @@ public LoginWindow()
                 
                 Acc.setText("Staff");
                 Acc.setFont(new Font("Arial", Font.BOLD, 17));
-                Acc.setBounds(80, 215, 145, 35);
+                Acc.setBounds(115, 215, 145, 35);
                 Acc.setVisible(true);
                 
                 Ok.setVisible(true);
@@ -235,7 +235,7 @@ public LoginWindow()
                 
                 Acc.setText("Staff");
                 Acc.setFont(new Font("Arial", Font.BOLD, 17));
-                Acc.setBounds(80, 215, 145, 35);
+                Acc.setBounds(115, 215, 145, 35);
                 Acc.setVisible(true);
                 
                 Ok.setVisible(true);
