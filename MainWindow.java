@@ -34,7 +34,7 @@ public class MainWindow
                 pst.executeUpdate(query);
                 JOptionPane.showMessageDialog(null, "Stock Updated!!!");
             table.setModel(
-            new DefaultTableModel(getTable(), new String[]{"Product Code", "Category", "Item Description", "Quantity", "Price", "Total"})
+            new DefaultTableModel(getTable(), new String[]{"Product Code", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"})
         );
                 con.close();
                 for (JTextField tff : tf ) {
@@ -60,7 +60,7 @@ public class MainWindow
                 pst.executeUpdate(query);
                 JOptionPane.showMessageDialog(null, "Stock Deleted!!!");
                 table.setModel(
-            new DefaultTableModel(getTable(), new String[]{"Product Code", "Category", "Item Description", "Quantity", "Price", "Total"})
+            new DefaultTableModel(getTable(), new String[]{"Product Code", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"})
         );
                 con.close();
                 for (JTextField tff : tf ) {
@@ -86,12 +86,12 @@ public class MainWindow
                 while (rs.next()) {
                     ArrayList<Object> arry = new ArrayList<Object>();
                     
-                    arry.add(rs.getString("ProductCode"));
-                    arry.add(rs.getString("Category"));
+                    arry.add(rs.getString("Product Code"));
+                    arry.add(rs.getString("Product Category"));
                     arry.add(rs.getString("Item Description"));
                     arry.add(rs.getInt("Quantity"));
-                    arry.add(rs.getBigDecimal("Price"));
-                    arry.add(rs.getBigDecimal("Total"));
+                    arry.add(rs.getBigDecimal("Unit Price"));
+                    arry.add(rs.getBigDecimal("Amount"));
                     
                     arryB.add(arry);
                 }
@@ -128,12 +128,12 @@ public class MainWindow
                 while (rs.next()) {
                     ArrayList<Object> arry = new ArrayList<Object>();
                     
-                    arry.add(rs.getString("ProductCode"));
-                    arry.add(rs.getString("Category"));
+                    arry.add(rs.getString("Product Code"));
+                    arry.add(rs.getString("Product Category"));
                     arry.add(rs.getString("Item Description"));
                     arry.add(rs.getInt("Quantity"));
-                    arry.add(rs.getBigDecimal("Price"));
-                    arry.add(rs.getBigDecimal("Total"));
+                    arry.add(rs.getBigDecimal("Unit Price"));
+                    arry.add(rs.getBigDecimal("Amount"));
                     
                     arryB.add(arry);
                 }
@@ -170,12 +170,12 @@ public class MainWindow
                 while (rs.next()) {
                     ArrayList<Object> arry = new ArrayList<Object>();
                     
-                    arry.add(rs.getString("ProductCode"));
-                    arry.add(rs.getString("Category"));
+                    arry.add(rs.getString("Product Code"));
+                    arry.add(rs.getString("Product Category"));
                     arry.add(rs.getString("Item Description"));
                     arry.add(rs.getInt("Quantity"));
-                    arry.add(rs.getBigDecimal("Price"));
-                    arry.add(rs.getBigDecimal("Total"));
+                    arry.add(rs.getBigDecimal("Unit Price"));
+                    arry.add(rs.getBigDecimal("Amount"));
                     
                     arryB.add(arry);
                 }
@@ -224,8 +224,8 @@ public class MainWindow
                     arry.add(rs.getString("Product Code"));
                     arry.add(rs.getString("Item Description"));
                     arry.add(rs.getInt("Quantity"));
-                    arry.add(rs.getBigDecimal("Price"));
-                    arry.add(rs.getBigDecimal("Total"));
+                    arry.add(rs.getBigDecimal("Unit Price"));
+                    arry.add(rs.getBigDecimal("Amount"));
                     
                     arryB.add(arry);
                 }
@@ -293,8 +293,6 @@ public class MainWindow
         root.setIconImage(Logo.getImage());
         
         panel.setLayout(null);
-        
-        
         
         // Inventory Section
         
@@ -365,13 +363,13 @@ public class MainWindow
         
         panel_.add(new JLabel("Product Code"));
         panel_.add(AddProductCodeBar);
-        panel_.add(new JLabel(" Category"));
+        panel_.add(new JLabel("Product Category"));
         panel_.add(AddCategoryBar);
         panel_.add(new JLabel("Item Description"));
         panel_.add(AddItemDescriptionBar);
         panel_.add(new JLabel("Quantity"));
         panel_.add(AddQuantityBar);
-        panel_.add(new JLabel("Price"));
+        panel_.add(new JLabel("Unit Price"));
         panel_.add(AddPriceBar);
         
         AddNewItem.setBounds(100, 120, 120, 25);
@@ -388,7 +386,6 @@ public class MainWindow
         Search.setForeground(Color.BLACK);
         Search.setBounds(690,120,120,25);
         Search.setOpaque(false);
-    
         SearchBar.setBounds(740,120,120,25);
         SearchBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         SearchBar.setOpaque(false);
@@ -405,7 +402,7 @@ public class MainWindow
         });
         
         JTable Lamisa = new JTable(); 
-        Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"Product Code", "Category", "Item Description", "Quantity", "Price", "Total"}));
+        Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"Product Code", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));
         Lamisa.getColumnModel().getColumn(2).setPreferredWidth(220);
         JScrollPane MainLamisa = new JScrollPane(Lamisa); 
         MainLamisa.setBounds(30,160,830,220);
@@ -469,8 +466,13 @@ public class MainWindow
         
         JMenuItem all_ = new JMenuItem("All");
         JMenuItem Adapter = new JMenuItem("Adapter");
-        JMenuItem Cement = new JMenuItem("Cement");
         JMenuItem Bar = new JMenuItem("Bar");
+        JMenuItem Cement = new JMenuItem("Cement");
+        JMenuItem Coupling = new JMenuItem("Coupling");
+        JMenuItem Hardiflex = new JMenuItem("Hardiflex");
+        JMenuItem Pipe = new JMenuItem("Pipe");
+        JMenuItem Plywood = new JMenuItem("Plywood");
+        JMenuItem Sheet = new JMenuItem("Sheet");
         JComboBox Category = new JComboBox(new String[]{"All", "Adapter", "Bar", "Cement", "Coupling", "Hardiflex", "Pipe", "Plywood", "Sheet"});
         Category.setFont(new Font("Arial", Font.BOLD, 12));
         Category.setBounds(520, 120, 120, 25);
@@ -479,9 +481,9 @@ public class MainWindow
             public void actionPerformed(ActionEvent e) {
                 String cats = (String) Category.getItemAt(Category.getSelectedIndex());
                 if (cats.equals("All")) {
-                Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"Product Code", "Category", "Item Description", "Quantity", "Price", "Total"}));   
+                Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"Product Code", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));   
                 } else {
-                Lamisa.setModel(new DefaultTableModel(getTable(cats), new String[]{"Product Code", "Category", "Item Description", "Quantity", "Price", "Total"}));
+                Lamisa.setModel(new DefaultTableModel(getTable(cats), new String[]{"Product Code", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));
                 }
             }
         });
@@ -567,18 +569,33 @@ public class MainWindow
         
         // Transaction Log Section
         JTable TransactionLogTable = new JTable();
-        TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Transaction Code","Product Code", "Item Description", "Quantity", "Price", "Total"}));
+        TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Transaction Code","Product Code", "Item Description", "Quantity", "Unit Price", "Amount"}));
         // TransactionLogTable.getColumnModel().getColumn(2).setPreferredWidth(220);
         JScrollPane TransacLogTable = new JScrollPane(TransactionLogTable); 
-        TransacLogTable.setBounds(30,130,830,350);
+        TransacLogTable.setBounds(30,160,830,320);
         TransacLogTable.setVisible(false);
+        
+        JLabel TransacTotalSales = new JLabel("Total Sales: ₱");
+        JTextField TransacTotalSalesBar = new JTextField();
+        
+        TransacTotalSales.setFont(new Font("Arial", Font.BOLD, 12));
+        TransacTotalSales.setForeground(Color.BLACK);
+        TransacTotalSales.setBounds(30,480,150,25);
+        TransacTotalSales.setOpaque(false);
+        TransacTotalSales.setVisible(false);
+        TransacTotalSalesBar.setBounds(107,480,50,25);
+        TransacTotalSalesBar.setBorder(BorderFactory.createEmptyBorder());
+        TransacTotalSalesBar.setEditable(false);
+        TransacTotalSalesBar.setOpaque(false);
+        TransacTotalSalesBar.setVisible(false);
         
         // Buy Section
         JLabel BuyProductCode = new JLabel("Product Code");
         JLabel BuyItemDescription = new JLabel("Item Description");
         JLabel BuyStock = new JLabel("Stock");
-        JLabel BuyPrice = new JLabel("Price");
+        JLabel BuyPrice = new JLabel("Unit Price");
         JLabel BuyQuantity = new JLabel("Quantity");
+        JLabel BuyCustomersName = new JLabel("Customer's Name");
         
         JTextField BuyFillUpBar = new JTextField();
         JTextField BuyProductCodeBar = new JTextField();
@@ -586,6 +603,7 @@ public class MainWindow
         JTextField BuyStockBar = new JTextField();
         JTextField BuyPriceBar = new JTextField();
         JTextField BuyQuantityBar = new JTextField();
+        JTextField BuyCustomersNameBar = new JTextField();
         
         JButton BuyAdd = new JButton("Add");
         
@@ -690,7 +708,6 @@ public class MainWindow
         BuyFillUpBar.setOpaque(false);
         BuyFillUpBar.setVisible(false);
         
-        
         BuyProductCode.setFont(new Font("Arial", Font.BOLD, 12));
         BuyProductCode.setForeground(Color.BLACK);
         BuyProductCode.setBounds(107,195,150,25);
@@ -723,7 +740,7 @@ public class MainWindow
         
         BuyPrice.setFont(new Font("Arial", Font.BOLD, 12));
         BuyPrice.setForeground(Color.BLACK);
-        BuyPrice.setBounds(156,300,150,25);
+        BuyPrice.setBounds(132,300,150,25);
         BuyPrice.setOpaque(false);
         BuyPrice.setVisible(false);
         BuyPriceBar.setBounds(195,300,160,25);
@@ -758,7 +775,7 @@ public class MainWindow
         
         BuyQuantity.setFont(new Font("Arial", Font.BOLD, 12));
         BuyQuantity.setForeground(Color.BLACK);
-        BuyQuantity.setBounds(138,335,150,25);
+        BuyQuantity.setBounds(140,335,150,25);
         BuyQuantity.setOpaque(false);
         BuyQuantity.setVisible(false);
         BuyQuantityBar.setBounds(195,335,160,25);
@@ -766,19 +783,29 @@ public class MainWindow
         BuyQuantityBar.setOpaque(false);
         BuyQuantityBar.setVisible(false);
         
-        BuyAdd.setBounds(70, 380, 80, 40);
+        BuyCustomersName.setFont(new Font("Arial", Font.BOLD, 12));
+        BuyCustomersName.setForeground(Color.BLACK);
+        BuyCustomersName.setBounds(85,370,150,25);
+        BuyCustomersName.setOpaque(false);
+        BuyCustomersName.setVisible(false);
+        BuyCustomersNameBar.setBounds(195,370,160,25);
+        BuyCustomersNameBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        BuyCustomersNameBar.setOpaque(false);
+        BuyCustomersNameBar.setVisible(false);
+        
+        BuyAdd.setBounds(70, 415, 80, 40);
         BuyAdd.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyAdd.setContentAreaFilled(false);
         BuyAdd.setOpaque(false);
         BuyAdd.setVisible(false);
         
-        BuyCalculate.setBounds(173, 380, 80, 40);
+        BuyCalculate.setBounds(173, 415, 80, 40);
         BuyCalculate.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyCalculate.setContentAreaFilled(false);
         BuyCalculate.setOpaque(false);
         BuyCalculate.setVisible(false);
         
-        BuyRemove.setBounds(275, 380, 80, 40);
+        BuyRemove.setBounds(275, 415, 80, 40);
         BuyRemove.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyRemove.setContentAreaFilled(false);
         BuyRemove.setOpaque(false);
@@ -787,7 +814,6 @@ public class MainWindow
          // Users Account Section
         JTable UserAccountsTable = new JTable();
         UserAccountsTable.setModel(new DefaultTableModel(getTableUser(), new String[]{"Username","Passwd","AccType"}));
-        //UserAccountsTable.getColumnModel().getColumn(2).setPreferredWidth(220);
         JScrollPane UserAndAccountsTable = new JScrollPane(UserAccountsTable);
         UserAndAccountsTable.setBounds(400,130,440,250);
         UserAndAccountsTable.setVisible(false);
@@ -833,7 +859,6 @@ public class MainWindow
         UserAccountTypeBar.setOpaque(false);
         UserAccountTypeBar.setVisible(false);
     
-       
         UserNew.setBounds(135, 300, 80, 40);
         UserNew.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         UserNew.setContentAreaFilled(false);
@@ -906,6 +931,8 @@ public class MainWindow
                 Lamisa.setVisible(true);
                 MainLamisa.setVisible(true);
                 TransacLogTable.setVisible(false);
+                TransacTotalSales.setVisible(false);
+                TransacTotalSalesBar.setVisible(false);
                 BuyFillUpBar.setVisible(false);
                 BuyProductCode.setVisible(false);
                 BuyProductCodeBar.setVisible(false);
@@ -917,6 +944,8 @@ public class MainWindow
                 BuyPriceBar.setVisible(false);
                 BuyQuantity.setVisible(false);
                 BuyQuantityBar.setVisible(false);
+                BuyCustomersName.setVisible(false);
+                BuyCustomersNameBar.setVisible(false);
                 BuyAdd.setVisible(false);
                 BuyCalculate.setVisible(false);
                 BuyRemove.setVisible(false);
@@ -939,13 +968,13 @@ public class MainWindow
             public void actionPerformed(ActionEvent e)
             {
                 if (e.getSource() == Transac){
-                    TransacLogTable.setBounds(30,130,830,350);
+                    TransacLogTable.setBounds(30,160,830,320);
                 }
                 AddNewItem.setVisible(false);
                 TypeOfMaterial.setVisible(false);
                 Category.setVisible(false);
-                Search.setVisible(false);
-                SearchBar.setVisible(false);
+                Search.setVisible(true);
+                SearchBar.setVisible(true);
                 ItemDescription.setVisible(false);
                 ProductCode.setVisible(false);
                 ProductCodeBar.setVisible(false);
@@ -957,6 +986,8 @@ public class MainWindow
                 Lamisa.setVisible(false);
                 MainLamisa.setVisible(false);
                 TransacLogTable.setVisible(true);
+                TransacTotalSales.setVisible(true);
+                TransacTotalSalesBar.setVisible(true);
                 BuyFillUpBar.setVisible(false);
                 BuyProductCode.setVisible(false);
                 BuyProductCodeBar.setVisible(false);
@@ -968,6 +999,8 @@ public class MainWindow
                 BuyPriceBar.setVisible(false);
                 BuyQuantity.setVisible(false);
                 BuyQuantityBar.setVisible(false);
+                BuyCustomersName.setVisible(false);
+                BuyCustomersNameBar.setVisible(false);
                 BuyAdd.setVisible(false);
                 BuyCalculate.setVisible(false);
                 BuyRemove.setVisible(false);
@@ -1008,6 +1041,8 @@ public class MainWindow
                 Lamisa.setVisible(false);
                 MainLamisa.setVisible(false);
                 TransacLogTable.setVisible(true);
+                TransacTotalSales.setVisible(false);
+                TransacTotalSalesBar.setVisible(false);
                 BuyFillUpBar.setVisible(true);
                 BuyProductCode.setVisible(true);
                 BuyProductCodeBar.setVisible(true);
@@ -1019,6 +1054,8 @@ public class MainWindow
                 BuyPriceBar.setVisible(true);
                 BuyQuantity.setVisible(true);
                 BuyQuantityBar.setVisible(true);
+                BuyCustomersName.setVisible(true);
+                BuyCustomersNameBar.setVisible(true);
                 BuyAdd.setVisible(true);
                 BuyCalculate.setVisible(true);
                 BuyRemove.setVisible(true);
@@ -1057,6 +1094,8 @@ public class MainWindow
                 Lamisa.setVisible(false);
                 MainLamisa.setVisible(false);
                 TransacLogTable.setVisible(false);
+                TransacTotalSales.setVisible(false);
+                TransacTotalSalesBar.setVisible(false);
                 BuyFillUpBar.setVisible(false);
                 BuyProductCode.setVisible(false);
                 BuyProductCodeBar.setVisible(false);
@@ -1068,6 +1107,8 @@ public class MainWindow
                 BuyPriceBar.setVisible(false);
                 BuyQuantity.setVisible(false);
                 BuyQuantityBar.setVisible(false);
+                BuyCustomersName.setVisible(false);
+                BuyCustomersNameBar.setVisible(false);
                 BuyAdd.setVisible(false);
                 BuyCalculate.setVisible(false);
                 BuyRemove.setVisible(false);
@@ -1084,7 +1125,7 @@ public class MainWindow
         });
         
         // Conditioning of accounts
-        if (acc.getText().equals("Merchandiser"))
+        if (acc.getText().equals("Staff"))
         {
             Account.setFont(new Font("Arial", Font.BOLD, 12));
             Account.setForeground(Color.WHITE);
@@ -1152,6 +1193,8 @@ public class MainWindow
         panel.add(MainLamisa);
         
         panel.add(TransacLogTable);
+        panel.add(TransacTotalSales);
+        panel.add(TransacTotalSalesBar);
         
         panel.add(BuyFillUpBar);
         panel.add(BuyProductCode);
@@ -1164,6 +1207,8 @@ public class MainWindow
         panel.add(BuyStockBar);
         panel.add(BuyQuantity);
         panel.add(BuyQuantityBar);
+        panel.add(BuyCustomersName);
+        panel.add(BuyCustomersNameBar);
         panel.add(BuyAdd);
         panel.add(BuyCalculate);
         panel.add(BuyRemove);
@@ -1177,7 +1222,6 @@ public class MainWindow
         panel.add(UserAccountTypeBar);
         panel.add(UserNew);
         panel.add(UserDelete);        
-        
         
         root.revalidate();
         root.repaint();
