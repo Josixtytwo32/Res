@@ -158,7 +158,7 @@ public LoginWindow()
                 
                 Welcome.setVisible(true);
                 
-                Acc.setText("Merchandiser");
+                Acc.setText("Staff");
                 Acc.setFont(new Font("Arial", Font.BOLD, 17));
                 Acc.setBounds(80, 215, 145, 35);
                 Acc.setVisible(true);
@@ -233,7 +233,7 @@ public LoginWindow()
                 
                 Welcome.setVisible(true);
                 
-                Acc.setText("Merchandiser");
+                Acc.setText("Staff");
                 Acc.setFont(new Font("Arial", Font.BOLD, 17));
                 Acc.setBounds(80, 215, 145, 35);
                 Acc.setVisible(true);
