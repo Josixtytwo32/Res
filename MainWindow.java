@@ -404,6 +404,10 @@ public class MainWindow
         JTable Lamisa = new JTable(); 
         Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"Product Code", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));
         Lamisa.getColumnModel().getColumn(2).setPreferredWidth(220);
+        Lamisa.setEnabled(false);
+        Lamisa.setRowSelectionAllowed(true);
+        Lamisa.getTableHeader().setReorderingAllowed(false);
+        Lamisa.getTableHeader().setResizingAllowed(false);
         JScrollPane MainLamisa = new JScrollPane(Lamisa); 
         MainLamisa.setBounds(30,160,830,220);
         AddNewItem.addActionListener(e ->
@@ -570,7 +574,10 @@ public class MainWindow
         // Transaction Log Section
         JTable TransactionLogTable = new JTable();
         TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Transaction Code","Product Code", "Item Description", "Quantity", "Unit Price", "Amount"}));
-        // TransactionLogTable.getColumnModel().getColumn(2).setPreferredWidth(220);
+        TransactionLogTable.setEnabled(false);
+        TransactionLogTable.setRowSelectionAllowed(true);
+        TransactionLogTable.getTableHeader().setReorderingAllowed(false);
+        TransactionLogTable.getTableHeader().setResizingAllowed(false);
         JScrollPane TransacLogTable = new JScrollPane(TransactionLogTable); 
         TransacLogTable.setBounds(30,160,830,320);
         TransacLogTable.setVisible(false);
