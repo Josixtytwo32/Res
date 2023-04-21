@@ -1127,7 +1127,7 @@ public class MainWindow
         // Conditioning of accounts
         if (acc.getText().equals("Staff"))
         {
-            Account.setFont(new Font("Arial", Font.BOLD, 12));
+            Account.setFont(new Font("Arial", Font.BOLD, 15));
             Account.setForeground(Color.WHITE);
             Account.setBounds(700,10,100,50);
             Account.setOpaque(false);
