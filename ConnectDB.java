@@ -50,10 +50,10 @@ public class ConnectDB{
             JOptionPane.showMessageDialog(null, "Error: "+ex);
         }
     }   
-    public void Buy ( String ProductCode, String Category, String ItemDescription, int Quantity, float Price, float Total){
+    public void Buy ( String ProductCode, String ItemDescription, int Quantity, float Price, float Total){
         String query;
         try{
-            query = "INSERT INTO `transactionlog` (`Transaction Code`, `Product Code`, `Category`, `Item Description`, `Quantity`, `Price`, `Total`) VALUES ( NULL, '"+ProductCode+"' , '"+Category+"', '"+ItemDescription+"', "+Quantity+", "+Price+", "+Total+")";
+            query = "INSERT INTO `transactionlog`(`Transaction Code`, `Product Code`, `Item Description`, `Quantity`, `Price`, `Total`) VALUES ( NULL, '"+ProductCode+"' , '"+ItemDescription+"', "+Quantity+", "+Price+", "+Total+")";
             
             st.executeUpdate(query);
         }catch(SQLException ex){
