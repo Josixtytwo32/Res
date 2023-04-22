@@ -795,32 +795,6 @@ public class MainWindow
         
         
         JButton BuyRemove = new JButton("Remove");
-        BuyRemove.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e) {
-                int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
-                if (stat==0){
-                int rowIndex = BuyTable.getSelectedRow();
-                
-                String value = BuyTable.getModel().getValueAt(rowIndex, 0).toString();
-            
-                    String query = "DELETE FROM buytable WHERE `buytable`.`BuyID` = '"+value+"'";
-                     try
-                     {
-                         Class.forName("com.mysql.cj.jdbc.Driver");
-                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
-                         Statement pst = con.createStatement();
-                         pst.executeUpdate(query);
-                            
-                         DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
-                         model.removeRow(rowIndex);
-                     }
-                     catch(ClassNotFoundException | SQLException ex){
-                         JOptionPane.showMessageDialog(null, "Error: "+ex);
-                     }
-                }
-            }
-        });
-
         
         BuyFillUpBar.setBounds(70,150,285,25);
         BuyFillUpBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -1036,6 +1010,87 @@ public class MainWindow
                 }
             }
         });
+        
+        // Conditioning of accounts
+        if (acc.getText().equals("Staff"))
+        {
+            Account.setFont(new Font("Arial", Font.BOLD, 15));
+            Account.setForeground(Color.WHITE);
+            Account.setBounds(700,10,100,50);
+            Account.setOpaque(false);
+            User.setVisible(false);
+            Users.setVisible(false);
+            BuyRemove.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JPanel panel = new JPanel(new GridLayout(0, 1));
+                    JTextField usernameField = new JTextField();
+                    JPasswordField passwordField = new JPasswordField();
+                    panel.add(new JLabel("Enter Supervisor Credentials:"));
+                    panel.add(usernameField);
+                    panel.add(new JLabel("Supervisor Password:"));
+                    panel.add(passwordField);
+
+                    JLabel errorLabel = new JLabel("Incorrect Supervisor Credentials. Please try again.");
+                    errorLabel.setForeground(Color.RED);
+                    boolean showError = false;
+
+                    while (true) {
+                    if (showError) {
+                        panel.add(errorLabel);
+                    }
+                    JOptionPane pane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+                    JDialog dialog = pane.createDialog(null, "Login");
+                    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                    dialog.setVisible(true);
+                    Object result = pane.getValue();
+                    if (result == JOptionPane.UNINITIALIZED_VALUE || result.equals(JOptionPane.CANCEL_OPTION)) {
+                    dialog.dispose();
+                    break;
+                    }
+                    String username = usernameField.getText();
+                    String password = new String(passwordField.getPassword());
+                    if (username.equals("Supervisor") && password.equals("123")) {
+                        int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+                        if (stat==0){
+                            int rowIndex = BuyTable.getSelectedRow();
+
+                            String value = BuyTable.getModel().getValueAt(rowIndex, 0).toString();
+
+                            String query = "DELETE FROM buytable WHERE `buytable`.`BuyID` = '"+value+"'";
+                            try{
+                                Class.forName("com.mysql.cj.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                                Statement pst = con.createStatement();
+                                pst.executeUpdate(query);
+
+                                DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
+                                model.removeRow(rowIndex);
+                            }
+                            catch(ClassNotFoundException | SQLException ex){
+                                JOptionPane.showMessageDialog(null, "Error: "+ex);
+                            }
+                        }
+                        dialog.dispose();
+                        break;
+                        } else {
+                        if (!showError) {
+                            showError = true;
+                        }
+                        usernameField.setText("");
+                        passwordField.setText("");
+                        }
+                    }
+                }
+            });
+        }
+        else
+        {
+        Account.setFont(new Font("Arial", Font.BOLD, 15));
+        Account.setForeground(Color.WHITE);
+        Account.setBounds(700,10,100,50);
+        Account.setOpaque(false);
+        }
         
         Inventory.setBounds(30,15,50,50);
         Inventory.addActionListener(new ActionListener()
@@ -1258,45 +1313,6 @@ public class MainWindow
             }
         });
         
-        // Conditioning of accounts
-        if (acc.getText().equals("Staff"))
-        {
-            Account.setFont(new Font("Arial", Font.BOLD, 15));
-            Account.setForeground(Color.WHITE);
-            Account.setBounds(700,10,100,50);
-            Account.setOpaque(false);
-            User.setVisible(false);
-            Users.setVisible(false);
-            BuyRemove.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                JPanel panel = new JPanel(new GridLayout(0, 1));
-                JTextField usernameField = new JTextField();
-                JPasswordField passwordField = new JPasswordField();
-                panel.add(new JLabel("Enter Supervisor Credentials:"));
-                panel.add(usernameField);
-                panel.add(new JLabel("Supervisor Password:"));
-                panel.add(passwordField);
-                int result = JOptionPane.showConfirmDialog(null, panel, "Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                    if (result == JOptionPane.OK_OPTION) {
-                    String username = usernameField.getText();
-                    String password = new String(passwordField.getPassword());
-                        if (username.equals("Supervisor") && password.equals("123")) {
-                        JOptionPane.showOptionDialog(null, "Login successful!", "Success", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
-                        } else {
-                        JOptionPane.showMessageDialog(null, "Incorrect Supervisor Credentials. Please try again.");
-                    }
-                }
-            }
-        });
-        }
-        else
-        {
-        Account.setFont(new Font("Arial", Font.BOLD, 15));
-        Account.setForeground(Color.WHITE);
-        Account.setBounds(700,10,100,50);
-        Account.setOpaque(false);
-        }
         
         
         panel.add(Inven); 
