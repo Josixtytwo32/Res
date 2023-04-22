@@ -34,7 +34,7 @@ public class MainWindow
                 pst.executeUpdate(query);
                 JOptionPane.showMessageDialog(null, "Stock Updated!!!");
             table.setModel(
-            new DefaultTableModel(getTable(), new String[]{"Product Code", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"})
+            new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"})
         );
                 con.close();
                 for (JTextField tff : tf ) {
@@ -60,7 +60,7 @@ public class MainWindow
                 pst.executeUpdate(query);
                 JOptionPane.showMessageDialog(null, "Stock Deleted!!!");
                 table.setModel(
-            new DefaultTableModel(getTable(), new String[]{"Product Code", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"})
+            new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"})
         );
                 con.close();
                 for (JTextField tff : tf ) {
@@ -85,8 +85,8 @@ public class MainWindow
                                 
                 while (rs.next()) {
                     ArrayList<Object> arry = new ArrayList<Object>();
-                    
-                    arry.add(rs.getString("Product Code"));
+
+                    arry.add(rs.getString("ProductCode"));
                     arry.add(rs.getString("Product Category"));
                     arry.add(rs.getString("Item Description"));
                     arry.add(rs.getInt("Quantity"));
@@ -114,11 +114,10 @@ public class MainWindow
     }
 
     public Object[][] getTable(String cell) {
-        String query = "select * from sql12600942.inventory where Category = '" + cell + "';";
-        
+        String query = "select * from sql12600942.inventory where Product Category = '" + cell + "';";        
         ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
-
-        int rowCount = 1;
+        System.out.println();
+        int rowCount = 10;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
@@ -128,7 +127,7 @@ public class MainWindow
                 while (rs.next()) {
                     ArrayList<Object> arry = new ArrayList<Object>();
                     
-                    arry.add(rs.getString("Product Code"));
+                    arry.add(rs.getString("ProductCode"));
                     arry.add(rs.getString("Product Category"));
                     arry.add(rs.getString("Item Description"));
                     arry.add(rs.getInt("Quantity"));
@@ -170,7 +169,7 @@ public class MainWindow
                 while (rs.next()) {
                     ArrayList<Object> arry = new ArrayList<Object>();
                     
-                    arry.add(rs.getString("Product Code"));
+                    arry.add(rs.getString("ProductCode"));
                     arry.add(rs.getString("Product Category"));
                     arry.add(rs.getString("Item Description"));
                     arry.add(rs.getInt("Quantity"));
@@ -207,7 +206,7 @@ public class MainWindow
         return -1; // If the value is not found in any row
     }
     public Object[][] getTabletrans() {
-        String query = "select * from sql12600942.transactionlog;";
+        String query = "select * from transactionlog AS transL, inventory AS inv, buytable AS buyT where transL.BuyID = buyT.BuyID && transL.ProductCode = inv.ProductCode;";
         
         ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
         
@@ -220,12 +219,57 @@ public class MainWindow
                                 
                 while (rs.next()) {
                     ArrayList<Object> arry = new ArrayList<Object>();
-                    arry.add(rs.getInt("Transaction Code"));
+                    arry.add(rs.getString("buyT.DatePurc"));
+                    arry.add(rs.getString("buyT.Customersname"));
+                    arry.add(rs.getString("ProductCode"));
+                    arry.add(rs.getString("inv.Item Description"));
+                    arry.add(rs.getInt("buyT.Quantity"));
+                    arry.add(rs.getBigDecimal("inv.Unit Price"));
+                    arry.add(rs.getBigDecimal("buyT.Amount"));
+                    arry.add(rs.getBigDecimal("AmountPaid"));
+                    arry.add(rs.getBigDecimal("Change"));
+                    
+                    arryB.add(arry);
+                }
+                
+               con.close();
+            }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+            
+        Object[][] mainobj = new Object[arryB.size()][7];
+        
+        for (int i = 0; i < arryB.size(); i++) {
+            for (int j = 0; j < arryB.get(i).size(); j++) {
+                mainobj[i][j] = arryB.get(i).get(j);
+            }
+        }
+            
+        return mainobj;
+        }
+        
+        public Object[][] getTableBuy() {
+        String query = "select * from buytable AS bt, inventory AS inv WHERE bt.ProductCode = inv.ProductCode;";
+        
+        ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
+        
+        int rowCount = 1;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                Statement pst = con.createStatement();
+                ResultSet rs = pst.executeQuery(query);
+                                
+                while (rs.next()) {
+                    ArrayList<Object> arry = new ArrayList<Object>();
+                    arry.add(rs.getString("Customersname"));
                     arry.add(rs.getString("Product Code"));
-                    arry.add(rs.getString("Item Description"));
+                    arry.add(rs.getString("inv.Item Description"));
                     arry.add(rs.getInt("Quantity"));
-                    arry.add(rs.getBigDecimal("Unit Price"));
+                    arry.add(rs.getBigDecimal("inv.Unit Price"));
                     arry.add(rs.getBigDecimal("Amount"));
+                    arry.add(rs.getString("DatePurc"));
                     
                     arryB.add(arry);
                 }
@@ -247,6 +291,7 @@ public class MainWindow
         return mainobj;
         
     }
+        
     public Object[][] getTableUser() {
         String query = "select * from sql12600942.account;";
         
@@ -307,7 +352,7 @@ public class MainWindow
         JLabel Search = new JLabel("Search:");
         JLabel ProductCode = new JLabel("Product Code:");
         JLabel ItemDescription = new JLabel("Item Description:");
-        JLabel StockToAdd = new JLabel("Quantity to Add:");
+        JLabel StockToAdd = new JLabel("Stock to Add:");
         
         JButton Inventory = new JButton(ii);
         JButton Transac = new JButton(ti);
@@ -391,6 +436,7 @@ public class MainWindow
         SearchBar.setOpaque(false);
         
         
+        
         LogOut.setBounds(825,20,35,35);
         LogOut.addActionListener(new ActionListener() 
         {
@@ -402,7 +448,7 @@ public class MainWindow
         });
         
         JTable Lamisa = new JTable(); 
-        Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"Product Code", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));
+        Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Stock", "Unit Price", "Amount"}));
         Lamisa.getColumnModel().getColumn(2).setPreferredWidth(220);
         Lamisa.setEnabled(false);
         Lamisa.setRowSelectionAllowed(true);
@@ -485,9 +531,9 @@ public class MainWindow
             public void actionPerformed(ActionEvent e) {
                 String cats = (String) Category.getItemAt(Category.getSelectedIndex());
                 if (cats.equals("All")) {
-                Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"Product Code", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));   
+                Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));   
                 } else {
-                Lamisa.setModel(new DefaultTableModel(getTable(cats), new String[]{"Product Code", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));
+                Lamisa.setModel(new DefaultTableModel(getTable(cats), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));
                 }
             }
         });
@@ -573,17 +619,41 @@ public class MainWindow
         
         // Transaction Log Section
         JTable TransactionLogTable = new JTable();
-        TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Transaction Code","Product Code", "Item Description", "Quantity", "Unit Price", "Amount"}));
-        TransactionLogTable.setEnabled(false);
+        TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Date of Purchase", "Customersname","Product Code", "Item Description", "Quantity", "Unit Price", "Amount"}));
         TransactionLogTable.setRowSelectionAllowed(true);
-        TransactionLogTable.getTableHeader().setReorderingAllowed(false);
-        TransactionLogTable.getTableHeader().setResizingAllowed(false);
         JScrollPane TransacLogTable = new JScrollPane(TransactionLogTable); 
         TransacLogTable.setBounds(30,160,830,320);
         TransacLogTable.setVisible(false);
         
         JLabel TransacTotalSales = new JLabel("Total Sales: ₱");
         JTextField TransacTotalSalesBar = new JTextField();
+        
+        SearchBar.addKeyListener(new KeyListener() {
+            
+            DefaultTableModel model;
+            
+            public void search (String str){
+                model = (DefaultTableModel) TransactionLogTable.getModel();
+                TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
+                TransactionLogTable.setRowSorter(trs);
+                trs.setRowFilter(RowFilter.regexFilter("(?i)"+str));
+            }         
+            @Override
+            public void keyTyped(KeyEvent event) {
+                
+            }
+         
+            @Override
+            public void keyReleased(KeyEvent event) {
+               String searchString = SearchBar.getText();
+               search(searchString);
+            }
+         
+            @Override
+            public void keyPressed(KeyEvent event) {
+               
+            }
+        });  
         
         TransacTotalSales.setFont(new Font("Arial", Font.BOLD, 12));
         TransacTotalSales.setForeground(Color.BLACK);
@@ -597,12 +667,22 @@ public class MainWindow
         TransacTotalSalesBar.setVisible(false);
         
         // Buy Section
+        // Transaction Log Section
+        JTable BuyTable = new JTable();
+        BuyTable.setModel(new DefaultTableModel(getTableBuy(), new String[]{"Customer's Name","Product Code", "Item Description", "Quantity", "Unit Price", "Amount", "Date of Purchase"}));
+        BuyTable.setRowSelectionAllowed(true);
+        JScrollPane BTable = new JScrollPane(BuyTable); 
+        BTable.setBounds(30,160,830,320);
+        BTable.setVisible(false);
+
+        
         JLabel BuyProductCode = new JLabel("Product Code");
         JLabel BuyItemDescription = new JLabel("Item Description");
         JLabel BuyStock = new JLabel("Stock");
         JLabel BuyPrice = new JLabel("Unit Price");
         JLabel BuyQuantity = new JLabel("Quantity");
-        JLabel BuyCustomersName = new JLabel("Customer's Name");
+        JLabel BuyCustomersName = new JLabel("Sold to:");
+        JLabel ReceiptNo = new JLabel("Receipt No.");
         
         JTextField BuyFillUpBar = new JTextField();
         JTextField BuyProductCodeBar = new JTextField();
@@ -611,6 +691,7 @@ public class MainWindow
         JTextField BuyPriceBar = new JTextField();
         JTextField BuyQuantityBar = new JTextField();
         JTextField BuyCustomersNameBar = new JTextField();
+        JTextField ReceiptNoBar = new JTextField();
         
         JButton BuyAdd = new JButton("Add");
         
@@ -619,14 +700,16 @@ public class MainWindow
              
             
             if (!BuyFillUpBar.getText().equals("") && !BuyProductCodeBar.getText().equals("") && !BuyItemDescriptionBar.getText().equals("") && !BuyStockBar.getText().equals("") && !BuyPriceBar.getText().equals("") && !BuyQuantityBar.getText().equals("")){
-                DefaultTableModel model = (DefaultTableModel) TransactionLogTable.getModel();
+                DefaultTableModel model = (DefaultTableModel) BuyTable.getModel();
                 Object[] row = { BuyFillUpBar.getText(), BuyProductCodeBar.getText(), BuyItemDescriptionBar.getText(), BuyStockBar.getText(), BuyPriceBar.getText(), 
                                 ((float) Integer.valueOf(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()) };
                 model.addRow(row);
                 
                 ConnectDB cdb=new ConnectDB();
                 
-                cdb.Buy(BuyProductCodeBar.getText(), BuyItemDescriptionBar.getText(), Integer.valueOf(BuyQuantityBar.getText()), Float.parseFloat(BuyPriceBar.getText()), ((float) Integer.valueOf(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()));
+                //cdb.Buy(BuyCustomersNameBar.getText(),BuyProductCodeBar.getText(), Integer.valueOf(BuyQuantityBar.getText()), Float.parseFloat(BuyPriceBar.getText()), ((float) Integer.valueOf(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()));
+                cdb.Buy(BuyCustomersNameBar.getText(), BuyProductCodeBar.getText(), ((float) Float.parseFloat(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()),Float.parseFloat(BuyQuantityBar.getText()), "0");
+                //cdb.Transaclog(BuyProductCodeBar.getText(), Integer.valueOf(BuyQuantityBar.getText()), Float.parseFloat(BuyPriceBar.getText()), ((float) Integer.valueOf(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()) );
             }       
             }
         });
@@ -648,12 +731,11 @@ public class MainWindow
             JOptionPane pane = new JOptionPane(fields, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null, new Object[]{"Ok"});
             
             AmountPaidBar.getDocument().addDocumentListener(new DocumentListener() {
-                int rowIndex = TransactionLogTable.getSelectedRow();
+                int rowIndex = BuyTable.getSelectedRow();
                 @Override
                 public void insertUpdate(DocumentEvent e) {
                     updateChange();
-                    DefaultTableModel model = (DefaultTableModel)TransactionLogTable.getModel();
-                            model.setRowCount(0);
+                    
                 }
                 @Override
                 public void removeUpdate(DocumentEvent e) {
@@ -662,6 +744,8 @@ public class MainWindow
                 @Override
                 public void changedUpdate(DocumentEvent e) {
                     updateChange();
+                    DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
+                            model.setRowCount(0);
                 }
                 private void updateChange() {
                     try {
@@ -686,11 +770,11 @@ public class MainWindow
             public void actionPerformed(ActionEvent e) {
                 int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
                 if (stat==0){
-                int rowIndex = TransactionLogTable.getSelectedRow();
+                int rowIndex = BuyTable.getSelectedRow();
                 
-                String value = TransactionLogTable.getModel().getValueAt(rowIndex, 0).toString();
+                String value = BuyTable.getModel().getValueAt(rowIndex, 0).toString();
             
-                        String query = "DELETE FROM transactionlog WHERE `transactionlog`.`Transaction Code` = '"+value+"'";
+                        String query = "DELETE FROM buytable WHERE `buytable`.`BuyID` = '"+value+"'";
                         try
                         {
                             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -698,7 +782,7 @@ public class MainWindow
                             Statement pst = con.createStatement();
                             pst.executeUpdate(query);
                             
-                            DefaultTableModel model = (DefaultTableModel)TransactionLogTable.getModel();
+                            DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
                             model.removeRow(rowIndex);
                         }
                         catch(ClassNotFoundException | SQLException ex){
@@ -792,7 +876,7 @@ public class MainWindow
         
         BuyCustomersName.setFont(new Font("Arial", Font.BOLD, 12));
         BuyCustomersName.setForeground(Color.BLACK);
-        BuyCustomersName.setBounds(85,370,150,25);
+        BuyCustomersName.setBounds(145,370,150,25);
         BuyCustomersName.setOpaque(false);
         BuyCustomersName.setVisible(false);
         BuyCustomersNameBar.setBounds(195,370,160,25);
@@ -800,19 +884,29 @@ public class MainWindow
         BuyCustomersNameBar.setOpaque(false);
         BuyCustomersNameBar.setVisible(false);
         
-        BuyAdd.setBounds(70, 415, 80, 40);
+        ReceiptNo.setFont(new Font("Arial", Font.BOLD, 12));
+        ReceiptNo.setForeground(Color.BLACK);
+        ReceiptNo.setBounds(145,390,150,25);
+        ReceiptNo.setOpaque(false);
+        ReceiptNo.setVisible(false);
+        ReceiptNoBar.setBounds(195,390,160,25);
+        ReceiptNoBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        ReceiptNoBar.setOpaque(false);
+        ReceiptNoBar.setVisible(false);
+        
+        BuyAdd.setBounds(70, 450, 80, 40);
         BuyAdd.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyAdd.setContentAreaFilled(false);
         BuyAdd.setOpaque(false);
         BuyAdd.setVisible(false);
         
-        BuyCalculate.setBounds(173, 415, 80, 40);
+        BuyCalculate.setBounds(173, 450, 80, 40);
         BuyCalculate.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyCalculate.setContentAreaFilled(false);
         BuyCalculate.setOpaque(false);
         BuyCalculate.setVisible(false);
         
-        BuyRemove.setBounds(275, 415, 80, 40);
+        BuyRemove.setBounds(275, 450, 80, 40);
         BuyRemove.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyRemove.setContentAreaFilled(false);
         BuyRemove.setOpaque(false);
@@ -945,6 +1039,7 @@ public class MainWindow
                 BuyProductCodeBar.setVisible(false);
                 BuyItemDescription.setVisible(false);
                 BuyItemDescriptionBar.setVisible(false);
+                BTable.setVisible(false);
                 BuyStock.setVisible(false);
                 BuyStockBar.setVisible(false);
                 BuyPrice.setVisible(false);
@@ -995,6 +1090,7 @@ public class MainWindow
                 TransacLogTable.setVisible(true);
                 TransacTotalSales.setVisible(true);
                 TransacTotalSalesBar.setVisible(true);
+                BTable.setVisible(false);
                 BuyFillUpBar.setVisible(false);
                 BuyProductCode.setVisible(false);
                 BuyProductCodeBar.setVisible(false);
@@ -1030,7 +1126,7 @@ public class MainWindow
             public void actionPerformed(ActionEvent e)
             {
                 if (e.getSource() == Buy){
-                    TransacLogTable.setBounds(400,130,440,370);
+                    BTable.setBounds(400,130,440,370);
                 }
                 AddNewItem.setVisible(false);
                 TypeOfMaterial.setVisible(false);
@@ -1047,7 +1143,7 @@ public class MainWindow
                 RemoveItem.setVisible(false);
                 Lamisa.setVisible(false);
                 MainLamisa.setVisible(false);
-                TransacLogTable.setVisible(true);
+                TransacLogTable.setVisible(false);
                 TransacTotalSales.setVisible(false);
                 TransacTotalSalesBar.setVisible(false);
                 BuyFillUpBar.setVisible(true);
@@ -1055,14 +1151,17 @@ public class MainWindow
                 BuyProductCodeBar.setVisible(true);
                 BuyItemDescription.setVisible(true);
                 BuyItemDescriptionBar.setVisible(true);
-                BuyStock.setVisible(true);
-                BuyStockBar.setVisible(true);
+                BuyStock.setVisible(false);
+                BuyStockBar.setVisible(false);
                 BuyPrice.setVisible(true);
                 BuyPriceBar.setVisible(true);
+                BTable.setVisible(true);
                 BuyQuantity.setVisible(true);
                 BuyQuantityBar.setVisible(true);
                 BuyCustomersName.setVisible(true);
                 BuyCustomersNameBar.setVisible(true);
+                ReceiptNo.setVisible(true);
+                ReceiptNoBar.setVisible(true);
                 BuyAdd.setVisible(true);
                 BuyCalculate.setVisible(true);
                 BuyRemove.setVisible(true);
@@ -1103,6 +1202,7 @@ public class MainWindow
                 TransacLogTable.setVisible(false);
                 TransacTotalSales.setVisible(false);
                 TransacTotalSalesBar.setVisible(false);
+                BTable.setVisible(false);
                 BuyFillUpBar.setVisible(false);
                 BuyProductCode.setVisible(false);
                 BuyProductCodeBar.setVisible(false);
@@ -1203,6 +1303,7 @@ public class MainWindow
         panel.add(TransacTotalSales);
         panel.add(TransacTotalSalesBar);
         
+        panel.add(BTable);
         panel.add(BuyFillUpBar);
         panel.add(BuyProductCode);
         panel.add(BuyProductCodeBar);
