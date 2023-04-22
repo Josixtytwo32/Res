@@ -31,10 +31,10 @@ public class ConnectDB{
             JOptionPane.showMessageDialog(null, "Error: "+ex);
         }
     }
-    public void Transaclog (int TransactionCode, String ProductCode, String Category, String ItemDescription, int Quantity, float Price, float Total){
+    public void Transaclog (int BuyID, String ProductCode, String Category, String ItemDescription, int Quantity, float Price, float Total, float AmountPaid, float Change){
         String query;
         try{
-            query = "INSERT INTO 'transactionlog' ('Trancsaction Code', 'Product Code', 'Product Category', 'Item Description', ' Quantity', 'Unit Price', 'Amount')VALUES('"+TransactionCode+"', '"+ProductCode+"' , '"+Category+"', '"+ItemDescription+"', "+Quantity+", "+Price+", "+Total+")";
+            query = "INSERT INTO 'transactionlog' ('ProductCode', 'BuyID' ` AmountPaid`, `Change`)VALUES('"+ProductCode+"' ,"+BuyID+", "+AmountPaid+", "+Change+")";
             st.executeUpdate(query);
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Error: "+ex);
@@ -49,12 +49,12 @@ public class ConnectDB{
             JOptionPane.showMessageDialog(null, "Error: "+ex);
         }
     }   
-    public void Buy ( String ProductCode, String ItemDescription, int Quantity, float Price, float Total){
+    public void Buy ( String Customersname, String ProductCode,  float Quantity, float Amount, String DatePurc){
         String query;
         try{
-            query = "INSERT INTO `transactionlog`(`Transaction Code`, `Product Code`, `Item Description`, `Quantity`, `Unit Price`, `Amount`) VALUES ( NULL, '"+ProductCode+"' , '"+ItemDescription+"', "+Quantity+", "+Price+", "+Total+")";
+            query = "INSERT INTO `buytable`(`Customersname`, `ProductCode`, `Amount`, `Quantity`, `DatePurc`) VALUES ('"+Customersname+"', '"+ProductCode+"' , "+Amount+", "+Quantity+", '"+DatePurc+"')";
             
-            st.executeUpdate(query);
+            st.executeUpdate(query);    
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Error: "+ex);
         }
@@ -65,4 +65,4 @@ public class ConnectDB{
         
     }
         
-}
+}  
