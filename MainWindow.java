@@ -635,8 +635,8 @@ public class MainWindow
                             JOptionPane.showMessageDialog(null, "Error: "+ex);
         
                         }
+                }
             }
-        }
         });
         
         
@@ -712,8 +712,8 @@ public class MainWindow
         JLabel BuyStock = new JLabel("Stock");
         JLabel BuyPrice = new JLabel("Unit Price");
         JLabel BuyQuantity = new JLabel("Quantity");
-        JLabel BuyCustomersName = new JLabel("Sold to:");
-        JLabel ReceiptNo = new JLabel("Receipt No.");
+        JLabel BuyCustomersName = new JLabel("Sold to");
+        JLabel BuyReceiptNo = new JLabel("Receipt No.");
         
         JTextField BuyFillUpBar = new JTextField();
         JTextField BuyProductCodeBar = new JTextField();
@@ -722,7 +722,7 @@ public class MainWindow
         JTextField BuyPriceBar = new JTextField();
         JTextField BuyQuantityBar = new JTextField();
         JTextField BuyCustomersNameBar = new JTextField();
-        JTextField ReceiptNoBar = new JTextField();
+        JTextField BuyReceiptNoBar = new JTextField();
         
         JButton BuyAdd = new JButton("Add");
         
@@ -764,7 +764,6 @@ public class MainWindow
                 @Override
                 public void insertUpdate(DocumentEvent e) {
                     updateChange();
-                    
                 }
                 @Override
                 public void removeUpdate(DocumentEvent e) {
@@ -887,15 +886,15 @@ public class MainWindow
         BuyCustomersNameBar.setOpaque(false);
         BuyCustomersNameBar.setVisible(false);
         
-        ReceiptNo.setFont(new Font("Arial", Font.BOLD, 12));
-        ReceiptNo.setForeground(Color.BLACK);
-        ReceiptNo.setBounds(145,390,150,25);
-        ReceiptNo.setOpaque(false);
-        ReceiptNo.setVisible(false);
-        ReceiptNoBar.setBounds(195,390,160,25);
-        ReceiptNoBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        ReceiptNoBar.setOpaque(false);
-        ReceiptNoBar.setVisible(false);
+        BuyReceiptNo.setFont(new Font("Arial", Font.BOLD, 12));
+        BuyReceiptNo.setForeground(Color.BLACK);
+        BuyReceiptNo.setBounds(124,405,150,25);
+        BuyReceiptNo.setOpaque(false);
+        BuyReceiptNo.setVisible(false);
+        BuyReceiptNoBar.setBounds(195,405,160,25);
+        BuyReceiptNoBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        BuyReceiptNoBar.setOpaque(false);
+        BuyReceiptNoBar.setVisible(false);
         
         BuyAdd.setBounds(70, 450, 80, 40);
         BuyAdd.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -1130,6 +1129,8 @@ public class MainWindow
                 BuyQuantityBar.setVisible(false);
                 BuyCustomersName.setVisible(false);
                 BuyCustomersNameBar.setVisible(false);
+                BuyReceiptNo.setVisible(false);
+                BuyReceiptNoBar.setVisible(false);
                 BuyAdd.setVisible(false);
                 BuyCalculate.setVisible(false);
                 BuyRemove.setVisible(false);
@@ -1186,6 +1187,8 @@ public class MainWindow
                 BuyQuantityBar.setVisible(false);
                 BuyCustomersName.setVisible(false);
                 BuyCustomersNameBar.setVisible(false);
+                BuyReceiptNo.setVisible(false);
+                BuyReceiptNoBar.setVisible(false);
                 BuyAdd.setVisible(false);
                 BuyCalculate.setVisible(false);
                 BuyRemove.setVisible(false);
@@ -1242,8 +1245,8 @@ public class MainWindow
                 BuyQuantityBar.setVisible(true);
                 BuyCustomersName.setVisible(true);
                 BuyCustomersNameBar.setVisible(true);
-                ReceiptNo.setVisible(true);
-                ReceiptNoBar.setVisible(true);
+                BuyReceiptNo.setVisible(true);
+                BuyReceiptNoBar.setVisible(true);
                 BuyAdd.setVisible(true);
                 BuyCalculate.setVisible(true);
                 BuyRemove.setVisible(true);
@@ -1298,6 +1301,8 @@ public class MainWindow
                 BuyQuantityBar.setVisible(false);
                 BuyCustomersName.setVisible(false);
                 BuyCustomersNameBar.setVisible(false);
+                BuyReceiptNo.setVisible(false);
+                BuyReceiptNoBar.setVisible(false);
                 BuyAdd.setVisible(false);
                 BuyCalculate.setVisible(false);
                 BuyRemove.setVisible(false);
@@ -1360,6 +1365,8 @@ public class MainWindow
         panel.add(BuyQuantityBar);
         panel.add(BuyCustomersName);
         panel.add(BuyCustomersNameBar);
+        panel.add(BuyReceiptNo);
+        panel.add(BuyReceiptNoBar);
         panel.add(BuyAdd);
         panel.add(BuyCalculate);
         panel.add(BuyRemove);
