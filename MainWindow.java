@@ -642,7 +642,7 @@ public class MainWindow
         
         // Transaction Log Section
         JTable TransactionLogTable = new JTable();
-        TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Date of Purchase", "Customersname","Product Code", "Item Description", "Quantity", "Unit Price", "Amount"}));
+        TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Date of Purchase", "Customer's Name","Product Code", "Item Description", "Quantity", "Unit Price", "Amount"}));
         TransactionLogTable.getColumnModel().getColumn(2).setPreferredWidth(220);
         TransactionLogTable.getColumnModel().getColumn(4).setPreferredWidth(50);
         TransactionLogTable.getColumnModel().getColumn(5).setPreferredWidth(50);
