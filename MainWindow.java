@@ -20,6 +20,12 @@ public class MainWindow
     
  
     public void updates(Object[][] vals, JTable table, JTextField... tf) {
+        // Save column sizes
+        int[] columnSizes = new int[table.getColumnCount()];
+        for (int i = 0; i < columnSizes.length; i++) {
+            columnSizes[i] = table.getColumnModel().getColumn(i).getWidth();
+        }
+    
         String productcode = tf[0].getText();
         String itemdescription = tf[1].getText();
         int updateV = Integer.valueOf(tf[2].getText());
@@ -27,29 +33,38 @@ public class MainWindow
         
         if (!productcode.equals("") && !itemdescription.equals("")) {
             try { 
-                String query = "update sql12600942.inventory set Quantity = '" + (cc + updateV) + "', Total = '" + ((float) (cc + updateV) * Float.parseFloat(vals[0][4].toString())) + "' where ProductCode = '" + productcode + "';";
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
-                Statement pst = con.createStatement();
-                pst.executeUpdate(query);
-                JOptionPane.showMessageDialog(null, "Stock Updated!!!");
-            table.setModel(
-            new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"})
-        );
-                con.close();
-                for (JTextField tff : tf ) {
-                    tff.setText("");
-                }
-        } catch (Exception e) {
+            String query = "update sql12600942.inventory set Quantity = '" + (cc + updateV) + "', Amount = '" + ((float) (cc + updateV) * Float.parseFloat(vals[0][4].toString())) + "' where ProductCode = '" + productcode + "';";
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+            Statement pst = con.createStatement();
+            pst.executeUpdate(query);
+            JOptionPane.showMessageDialog(null, "Stock Updated!!!");
+            table.setModel(new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));
+            con.close();
+            for (JTextField tff : tf ) {
+                tff.setText("");
+            }
+            
+            // Restore column sizes
+            for (int i = 0; i < columnSizes.length; i++) {
+                table.getColumnModel().getColumn(i).setPreferredWidth(columnSizes[i]);
+            }
+            
+            } catch (Exception e) {
             e.printStackTrace();
+            }
         }
-        }
-        }
-    
+    }
+
     public void deletes(Object[][] vals, JTable table, JTextField... tf) {
         String ProdCode = tf[0].getText();
-        
-        
+
+        // Save column sizes before updating the table model
+        int[] columnSizes = new int[table.getColumnModel().getColumnCount()];
+        for (int i = 0; i < columnSizes.length; i++) {
+            columnSizes[i] = table.getColumnModel().getColumn(i).getWidth();
+        }
+    
         if (!ProdCode.equals("")) {
             try { 
                 String query = "DELETE FROM inventory WHERE `inventory`.`ProductCode` = ProdCode";
@@ -59,59 +74,65 @@ public class MainWindow
                 Statement pst = con.createStatement();
                 pst.executeUpdate(query);
                 JOptionPane.showMessageDialog(null, "Stock Deleted!!!");
-                table.setModel(
-            new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"})
-        );
+
+                // Restore column sizes after updating the table model
+                DefaultTableModel model = new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"});
+                table.setModel(model);
+                for (int i = 0; i < columnSizes.length; i++) {
+                    table.getColumnModel().getColumn(i).setPreferredWidth(columnSizes[i]);
+                }
+
                 con.close();
                 for (JTextField tff : tf ) {
                     tff.setText("");
                 }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
+
     public Object[][] getTable() {
         String query = "select * from sql12600942.inventory;";
         
         ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
 
         int rowCount = 1;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
-                Statement pst = con.createStatement();
-                ResultSet rs = pst.executeQuery(query);
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                    Statement pst = con.createStatement();
+                    ResultSet rs = pst.executeQuery(query);
                                 
-                while (rs.next()) {
-                    ArrayList<Object> arry = new ArrayList<Object>();
+                    while (rs.next()) {
+                        ArrayList<Object> arry = new ArrayList<Object>();
 
-                    arry.add(rs.getString("ProductCode"));
-                    arry.add(rs.getString("Product Category"));
-                    arry.add(rs.getString("Item Description"));
-                    arry.add(rs.getInt("Quantity"));
-                    arry.add(rs.getBigDecimal("Unit Price"));
-                    arry.add(rs.getBigDecimal("Amount"));
-                    
-                    arryB.add(arry);
-                }
+                        arry.add(rs.getString("ProductCode"));
+                        arry.add(rs.getString("Product Category"));
+                        arry.add(rs.getString("Item Description"));
+                        arry.add(rs.getInt("Quantity"));
+                        arry.add(rs.getBigDecimal("Unit Price"));
+                        arry.add(rs.getBigDecimal("Amount"));
+                        
+                        arryB.add(arry);
+                    }
                 
-               con.close();
+                   con.close();
+                }
+            catch(Exception ex) {
+                ex.printStackTrace();
             }
-        catch(Exception ex) {
-            ex.printStackTrace();
-        }
             
-        Object[][] mainobj = new Object[arryB.size()][6];
+            Object[][] mainobj = new Object[arryB.size()][6];
         
-        for (int i = 0; i < arryB.size(); i++) {
-            for (int j = 0; j < arryB.get(i).size(); j++) {
-                mainobj[i][j] = arryB.get(i).get(j);
+            for (int i = 0; i < arryB.size(); i++) {
+                for (int j = 0; j < arryB.get(i).size(); j++) {
+                    mainobj[i][j] = arryB.get(i).get(j);
+                }
             }
-        }
             
-        return mainobj;
-    }
+            return mainobj;
+        }
 
     public Object[][] getTable(String cell) {
         String query = "select * from sql12600942.inventory where Product Category = '" + cell + "';";        
