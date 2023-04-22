@@ -693,15 +693,20 @@ public class MainWindow
         TransacTotalSalesBar.setVisible(false);
         
         // Buy Section
-        // Transaction Log Section
         JTable BuyTable = new JTable();
         BuyTable.setModel(new DefaultTableModel(getTableBuy(), new String[]{"Customer's Name","Product Code", "Item Description", "Quantity", "Unit Price", "Amount", "Date of Purchase"}));
+        BuyTable.getColumnModel().getColumn(0).setPreferredWidth(45);
+        BuyTable.getColumnModel().getColumn(1).setPreferredWidth(55);
+        BuyTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+        BuyTable.getColumnModel().getColumn(3).setPreferredWidth(40);
+        BuyTable.getColumnModel().getColumn(4).setPreferredWidth(35);
+        BuyTable.getColumnModel().getColumn(5).setPreferredWidth(50);
+        BuyTable.getColumnModel().getColumn(6).setPreferredWidth(70);
         BuyTable.setRowSelectionAllowed(true);
         JScrollPane BTable = new JScrollPane(BuyTable); 
         BTable.setBounds(30,160,830,320);
         BTable.setVisible(false);
 
-        
         JLabel BuyProductCode = new JLabel("Product Code");
         JLabel BuyItemDescription = new JLabel("Item Description");
         JLabel BuyStock = new JLabel("Stock");
@@ -723,7 +728,6 @@ public class MainWindow
         
         BuyAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            
             if (!BuyFillUpBar.getText().equals("") && !BuyProductCodeBar.getText().equals("") && !BuyItemDescriptionBar.getText().equals("") && !BuyStockBar.getText().equals("") && !BuyPriceBar.getText().equals("") && !BuyQuantityBar.getText().equals("")){
                 DefaultTableModel model = (DefaultTableModel) BuyTable.getModel();
                 Object[] row = { BuyFillUpBar.getText(), BuyProductCodeBar.getText(), BuyItemDescriptionBar.getText(), BuyStockBar.getText(), BuyPriceBar.getText(), 
@@ -799,24 +803,24 @@ public class MainWindow
                 
                 String value = BuyTable.getModel().getValueAt(rowIndex, 0).toString();
             
-                        String query = "DELETE FROM buytable WHERE `buytable`.`BuyID` = '"+value+"'";
-                        try
-                        {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
-                            Statement pst = con.createStatement();
-                            pst.executeUpdate(query);
+                    String query = "DELETE FROM buytable WHERE `buytable`.`BuyID` = '"+value+"'";
+                     try
+                     {
+                         Class.forName("com.mysql.cj.jdbc.Driver");
+                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                         Statement pst = con.createStatement();
+                         pst.executeUpdate(query);
                             
-                            DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
-                            model.removeRow(rowIndex);
-                        }
-                        catch(ClassNotFoundException | SQLException ex){
-                            JOptionPane.showMessageDialog(null, "Error: "+ex);
-        
-                        }
+                         DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
+                         model.removeRow(rowIndex);
+                     }
+                     catch(ClassNotFoundException | SQLException ex){
+                         JOptionPane.showMessageDialog(null, "Error: "+ex);
+                     }
+                }
             }
-        }
         });
+
         
         BuyFillUpBar.setBounds(70,150,285,25);
         BuyFillUpBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -1012,27 +1016,25 @@ public class MainWindow
             public void actionPerformed(ActionEvent e) {
                 int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
                 if (stat==0){
-                int rowIndex = UserAccountsTable.getSelectedRow();
-                
-                String value = UserAccountsTable.getModel().getValueAt(rowIndex, 0).toString();
+                    int rowIndex = UserAccountsTable.getSelectedRow();
+                    
+                    String value = UserAccountsTable.getModel().getValueAt(rowIndex, 0).toString();
             
-                         String query = "DELETE FROM account WHERE `account`.`Username` = '"+value+"'";
-                        try
-                        {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
-                            Statement pst = con.createStatement();
-                            pst.executeUpdate(query);
+                    String query = "DELETE FROM account WHERE `account`.`Username` = '"+value+"'";
+                    try{
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                        Statement pst = con.createStatement();
+                        pst.executeUpdate(query);
                             
-                            DefaultTableModel model = (DefaultTableModel)UserAccountsTable.getModel();
-                            model.removeRow(rowIndex);
-                        }
-                        catch(ClassNotFoundException | SQLException ex){
-                            JOptionPane.showMessageDialog(null, "Error: "+ex);
-        
-                        }
+                        DefaultTableModel model = (DefaultTableModel)UserAccountsTable.getModel();
+                        model.removeRow(rowIndex);
+                    }
+                    catch(ClassNotFoundException | SQLException ex){
+                         JOptionPane.showMessageDialog(null, "Error: "+ex);
+                    }
+                }
             }
-        }
         });
         
         Inventory.setBounds(30,15,50,50);
@@ -1151,7 +1153,7 @@ public class MainWindow
             public void actionPerformed(ActionEvent e)
             {
                 if (e.getSource() == Buy){
-                    BTable.setBounds(400,130,440,370);
+                    BTable.setBounds(380,130,470,350);
                 }
                 AddNewItem.setVisible(false);
                 TypeOfMaterial.setVisible(false);
