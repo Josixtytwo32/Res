@@ -450,6 +450,8 @@ public class MainWindow
         JTable Lamisa = new JTable(); 
         Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Stock", "Unit Price", "Amount"}));
         Lamisa.getColumnModel().getColumn(2).setPreferredWidth(220);
+        Lamisa.getColumnModel().getColumn(4).setPreferredWidth(50);
+        Lamisa.getColumnModel().getColumn(5).setPreferredWidth(50);
         Lamisa.setEnabled(false);
         Lamisa.setRowSelectionAllowed(true);
         Lamisa.getTableHeader().setReorderingAllowed(false);
@@ -620,6 +622,9 @@ public class MainWindow
         // Transaction Log Section
         JTable TransactionLogTable = new JTable();
         TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Date of Purchase", "Customersname","Product Code", "Item Description", "Quantity", "Unit Price", "Amount"}));
+        TransactionLogTable.getColumnModel().getColumn(2).setPreferredWidth(220);
+        TransactionLogTable.getColumnModel().getColumn(4).setPreferredWidth(50);
+        TransactionLogTable.getColumnModel().getColumn(5).setPreferredWidth(50);
         TransactionLogTable.setRowSelectionAllowed(true);
         JScrollPane TransacLogTable = new JScrollPane(TransactionLogTable); 
         TransacLogTable.setBounds(30,160,830,320);
@@ -697,7 +702,6 @@ public class MainWindow
         
         BuyAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-             
             
             if (!BuyFillUpBar.getText().equals("") && !BuyProductCodeBar.getText().equals("") && !BuyItemDescriptionBar.getText().equals("") && !BuyStockBar.getText().equals("") && !BuyPriceBar.getText().equals("") && !BuyQuantityBar.getText().equals("")){
                 DefaultTableModel model = (DefaultTableModel) BuyTable.getModel();
