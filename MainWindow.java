@@ -473,7 +473,6 @@ public class MainWindow
         Lamisa.getColumnModel().getColumn(2).setPreferredWidth(220);
         Lamisa.getColumnModel().getColumn(4).setPreferredWidth(50);
         Lamisa.getColumnModel().getColumn(5).setPreferredWidth(50);
-        Lamisa.setEnabled(false);
         Lamisa.setRowSelectionAllowed(true);
         Lamisa.getTableHeader().setReorderingAllowed(false);
         Lamisa.getTableHeader().setResizingAllowed(false);
@@ -642,7 +641,7 @@ public class MainWindow
         
         // Transaction Log Section
         JTable TransactionLogTable = new JTable();
-        TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Date of Purchase", "Customer's Name","Product Code", "Item Description", "Quantity", "Unit Price", "Amount"}));
+        TransactionLogTable.setModel(new DefaultTableModel(getTabletrans(), new String[]{"Receipt No.", "Customer's Name","Product Code", "Item Description", "Quantity", "Unit Price", "Amount"}));
         TransactionLogTable.getColumnModel().getColumn(2).setPreferredWidth(220);
         TransactionLogTable.getColumnModel().getColumn(4).setPreferredWidth(50);
         TransactionLogTable.getColumnModel().getColumn(5).setPreferredWidth(50);
@@ -694,7 +693,7 @@ public class MainWindow
         
         // Buy Section
         JTable BuyTable = new JTable();
-        BuyTable.setModel(new DefaultTableModel(getTableBuy(), new String[]{"Customer's Name","Product Code", "Item Description", "Quantity", "Unit Price", "Amount", "Date of Purchase"}));
+        BuyTable.setModel(new DefaultTableModel(getTableBuy(), new String[]{"Customer's Name","Product Code", "Item Description", "Quantity", "Unit Price", "Amount", "Receipt No."}));
         BuyTable.getColumnModel().getColumn(0).setPreferredWidth(45);
         BuyTable.getColumnModel().getColumn(1).setPreferredWidth(55);
         BuyTable.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -728,16 +727,16 @@ public class MainWindow
         
         BuyAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            if (!BuyFillUpBar.getText().equals("") && !BuyProductCodeBar.getText().equals("") && !BuyItemDescriptionBar.getText().equals("") && !BuyStockBar.getText().equals("") && !BuyPriceBar.getText().equals("") && !BuyQuantityBar.getText().equals("")){
+            if (!BuyCustomersNameBar.getText().equals("") && !BuyFillUpBar.getText().equals("") && !BuyProductCodeBar.getText().equals("") && !BuyItemDescriptionBar.getText().equals("") && !BuyStockBar.getText().equals("") && !BuyPriceBar.getText().equals("") && !BuyQuantityBar.getText().equals("")){
                 DefaultTableModel model = (DefaultTableModel) BuyTable.getModel();
-                Object[] row = { BuyFillUpBar.getText(), BuyProductCodeBar.getText(), BuyItemDescriptionBar.getText(), BuyStockBar.getText(), BuyPriceBar.getText(), 
+                Object[] row = { BuyCustomersNameBar.getText(),BuyFillUpBar.getText(), BuyProductCodeBar.getText(), BuyItemDescriptionBar.getText(), BuyStockBar.getText(), BuyPriceBar.getText(), 
                                 ((float) Integer.valueOf(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()) };
                 model.addRow(row);
                 
                 ConnectDB cdb=new ConnectDB();
                 
                 //cdb.Buy(BuyCustomersNameBar.getText(),BuyProductCodeBar.getText(), Integer.valueOf(BuyQuantityBar.getText()), Float.parseFloat(BuyPriceBar.getText()), ((float) Integer.valueOf(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()));
-                cdb.Buy(BuyCustomersNameBar.getText(), BuyProductCodeBar.getText(), ((float) Float.parseFloat(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()),Float.parseFloat(BuyQuantityBar.getText()), "0");
+                cdb.Buy(BuyCustomersNameBar.getText(), BuyProductCodeBar.getText(), ((float) Float.parseFloat(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()),Float.parseFloat(BuyQuantityBar.getText()), ((float) Float.parseFloat(BuyReceiptNoBar.getText())));
                 //cdb.Transaclog(BuyProductCodeBar.getText(), Integer.valueOf(BuyQuantityBar.getText()), Float.parseFloat(BuyPriceBar.getText()), ((float) Integer.valueOf(BuyQuantityBar.getText())) * Float.parseFloat(BuyPriceBar.getText()) );
             }       
             }
