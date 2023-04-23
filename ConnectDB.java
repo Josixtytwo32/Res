@@ -49,10 +49,10 @@ public class ConnectDB{
             JOptionPane.showMessageDialog(null, "Error: "+ex);
         }
     }   
-    public void Buy ( String Customersname, String ProductCode,  float Quantity, float Amount, String DatePurc){
+    public void Buy ( String Customersname, String ProductCode,  float Quantity, float Amount, float ReceiptNo){
         String query;
         try{
-            query = "INSERT INTO `buytable`(`Customersname`, `ProductCode`, `Amount`, `Quantity`, `DatePurc`) VALUES ('"+Customersname+"', '"+ProductCode+"' , "+Amount+", "+Quantity+", '"+DatePurc+"')";
+            query = "INSERT INTO `buytable`(`Customersname`, `ProductCode`, `Amount`, `Quantity`, `ReceiptNo`) VALUES ('"+Customersname+"', '"+ProductCode+"' , "+Amount+", "+Quantity+", "+ReceiptNo+")";
             
             st.executeUpdate(query);    
         }catch(SQLException ex){
@@ -65,4 +65,4 @@ public class ConnectDB{
         
     }
         
-}  
+}       
