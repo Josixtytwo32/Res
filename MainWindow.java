@@ -1187,10 +1187,37 @@ public class MainWindow
         }
         else
         {
-        Account.setFont(new Font("Arial", Font.BOLD, 15));
-        Account.setForeground(Color.WHITE);
-        Account.setBounds(700,10,100,50);
-        Account.setOpaque(false);
+            Account.setFont(new Font("Arial", Font.BOLD, 15));
+            Account.setForeground(Color.WHITE);
+            Account.setBounds(700,10,100,50);
+            Account.setOpaque(false);
+            BuyRemove.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                
+                        int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+                        if (stat==0){
+                            int rowIndex = BuyTable.getSelectedRow();
+
+                            String value = BuyTable.getModel().getValueAt(rowIndex, 1).toString();
+
+                            String query = "DELETE FROM buytable WHERE `buytable`.`BuyID` = '"+value+"'";
+                            try{
+                                Class.forName("com.mysql.cj.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                                Statement pst = con.createStatement();
+                                pst.executeUpdate(query);
+
+                                DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
+                                model.removeRow(rowIndex);
+                            }
+                            catch(ClassNotFoundException | SQLException ex){
+                                JOptionPane.showMessageDialog(null, "Error: "+ex);
+                            }
+                            updates(getTable(BuyProductCodeBar.getText(), true), Lamisa, BuyProductCodeBar, BuyItemDescriptionBar, BuyQuantityBar);
+                    }
+                }
+            });
         }
         
         Inventory.setBounds(30,15,50,50);
