@@ -31,12 +31,12 @@ public class ConnectDB{
             JOptionPane.showMessageDialog(null, "Error: "+ex);
         }
     }
-    public void Transaclog (int BuyID, String ProductCode, String Category, String ItemDescription, int Quantity, float Price, float Total, float AmountPaid, float Change){
+    public void Transaclog (String ProductCode, int BuyID){
         String query;
         try{
-            query = "INSERT INTO 'transactionlog' ('ProductCode', 'BuyID' ` AmountPaid`, `Change`)VALUES('"+ProductCode+"' ,"+BuyID+", "+AmountPaid+", "+Change+")";
+            query = "INSERT INTO `transactionlog`(`ProductCode`, `BuyID`)VALUES('"+ProductCode+"', "+BuyID+")";
             st.executeUpdate(query);
-        }catch(SQLException ex){
+        }catch(SQLException ex){    
             JOptionPane.showMessageDialog(null, "Error: "+ex);
         }
     }
@@ -49,10 +49,10 @@ public class ConnectDB{
             JOptionPane.showMessageDialog(null, "Error: "+ex);
         }
     }   
-    public void Buy ( String Customersname, String ProductCode,  float Quantity, float Amount, float ReceiptNo){
+    public void Buy (int buyid, String Customersname, String ProductCode,  float Quantity, float Amount, String dop){
         String query;
         try{
-            query = "INSERT INTO `buytable`(`Customersname`, `ProductCode`, `Amount`, `Quantity`, `ReceiptNo`) VALUES ('"+Customersname+"', '"+ProductCode+"' , "+Amount+", "+Quantity+", "+ReceiptNo+")";
+            query = "INSERT INTO `buytable`(`BuyID`, `Customersname`, `ProductCode`, `Amount`, `Quantity`, `DoP`) VALUES ("+buyid+", '"+Customersname+"', '"+ProductCode+"' , "+Amount+", "+Quantity+", '"+dop+"')";
             
             st.executeUpdate(query);    
         }catch(SQLException ex){
