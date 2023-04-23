@@ -1117,7 +1117,7 @@ public class MainWindow
         {
             Account.setFont(new Font("Arial", Font.BOLD, 15));
             Account.setForeground(Color.WHITE);
-            Account.setBounds(700,10,100,50);
+            Account.setBounds(680,10,100,50);
             Account.setOpaque(false);
             User.setVisible(false);
             Users.setVisible(false);
@@ -1189,7 +1189,7 @@ public class MainWindow
         {
             Account.setFont(new Font("Arial", Font.BOLD, 15));
             Account.setForeground(Color.WHITE);
-            Account.setBounds(700,10,100,50);
+            Account.setBounds(680,10,100,50);
             Account.setOpaque(false);
             BuyRemove.addActionListener(new ActionListener(){
                 @Override
