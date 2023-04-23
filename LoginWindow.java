@@ -146,66 +146,56 @@ public LoginWindow()
         @Override
         public void actionPerformed(ActionEvent e) 
             {
-            String user = userText.getText();
-            String password = passwordText.getText();
+                String user = userText.getText();
+                String password = passwordText.getText();
+                
+                Error.setText("");
+                Success.setText("");
+                
+                
+                try{
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");                 
+                    String sql = "SELECT * FROM `account` WHERE Username=? AND Passwd=?";
+                    PreparedStatement pst = con.prepareStatement(sql);
+                    pst.setString(1, user);
+                    pst.setString(2,password);
+                    ResultSet rs = pst.executeQuery();
+                    
+                    if(rs.next()){
+                        Login.setVisible(false);
+                        Login.setEnabled(false);
+                    
+                        Welcome.setVisible(true);
+                    
+                        Acc.setText(user);
+                        Acc.setFont(new Font("Arial", Font.BOLD, 17));
+                        Acc.setBounds(80, 215, 145, 35);
+                        Acc.setVisible(true);
+                    
+                        Ok.setVisible(true);
+                        Ok.requestFocusInWindow();
+                    
+                        userLabel.setVisible(false);
+                        passwordLabel.setVisible(false);
+                        userText.setVisible(false);
+                        passwordText.setVisible(false);
+                        
+                        Success.setText("Log-in Successful");
+                        userText.setText("");
+                        passwordText.setText("");
+                    }else {
+                            
+                             Error.setText("Incorrect Username/Password, Try again!");
+                        userText.setText("");
+                        passwordText.setText("");
+                    }
+                    con.close();
+                }catch(Exception ex){
+                    JOptionPane.showMessageDialog(null,ex);
+                }
+            }
             
-            Error.setText("");
-            Success.setText("");
-            if(user.equals(accs.get(0).get(0)) && password.equals(accs.get(0).get(1)))
-            {
-                Login.setVisible(false);
-                Login.setEnabled(false);
-                
-                Welcome.setVisible(true);
-                
-                Acc.setText("Staff");
-                Acc.setFont(new Font("Arial", Font.BOLD, 17));
-                Acc.setBounds(115, 215, 145, 35);
-                Acc.setVisible(true);
-                
-                Ok.setVisible(true);
-                Ok.requestFocusInWindow();
-                
-                userLabel.setVisible(false);
-                passwordLabel.setVisible(false);
-                userText.setVisible(false);
-                passwordText.setVisible(false);
-                
-                Success.setText("Log-in Successful");
-                userText.setText("");
-                passwordText.setText("");
-            }
-            else if(user.equals(accs.get(1).get(0)) && password.equals(accs.get(1).get(1)))
-            {
-                Login.setVisible(false);
-                Login.setEnabled(false);
-                
-                Welcome.setVisible(true);
-                
-                Acc.setText("Supervisor");
-                Acc.setFont(new Font("Arial", Font.BOLD, 20));
-                Acc.setBounds(80, 215, 145, 35);
-                Acc.setVisible(true);
-                
-                Ok.setVisible(true);
-                Ok.requestFocusInWindow();
-                
-                userLabel.setVisible(false);
-                passwordLabel.setVisible(false);
-                userText.setVisible(false);
-                passwordText.setVisible(false);
-                
-                Success.setText("Log-in Successful");
-                userText.setText("");
-                passwordText.setText("");
-            }
-            else
-            {
-                Error.setText("Incorrect Username/Password, Try again!");
-                userText.setText("");
-                passwordText.setText("");
-            }
-            }  
         });
         
         Ok.setVisible(false);
@@ -220,66 +210,109 @@ public LoginWindow()
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-            String user = userText.getText();
-            String password = passwordText.getText();
-            
-            Error.setText("");
-            Success.setText("");
-             
-            if(user.equals(accs.get(0).get(0)) && password.equals(accs.get(0).get(1)))
-            {
-                Login.setVisible(false);
-                Login.setEnabled(false);
                 
-                Welcome.setVisible(true);
+                String user = userText.getText();
+                String password = passwordText.getText();
                 
-                Acc.setText("Staff");
-                Acc.setFont(new Font("Arial", Font.BOLD, 17));
-                Acc.setBounds(115, 215, 145, 35);
-                Acc.setVisible(true);
+                Error.setText("");
+                Success.setText("");
                 
-                Ok.setVisible(true);
-                Ok.requestFocusInWindow();
                 
-                userLabel.setVisible(false);
-                passwordLabel.setVisible(false);
-                userText.setVisible(false);
-                passwordText.setVisible(false);
-                
-                Success.setText("Log-in Successful");
-                userText.setText("");
-                passwordText.setText("");
-            }
-            else if(user.equals(accs.get(1).get(0)) && password.equals(accs.get(1).get(1)))
-            {
-                Login.setVisible(false);
-                Login.setEnabled(false);
-                
-                Welcome.setVisible(true);
-                
-                Acc.setText("Supervisor");
-                Acc.setFont(new Font("Arial", Font.BOLD, 20));
-                Acc.setBounds(80, 215, 145, 35);
-                Acc.setVisible(true);
-                
-                Ok.setVisible(true);
-                Ok.requestFocusInWindow();
-                
-                userLabel.setVisible(false);
-                passwordLabel.setVisible(false);
-                userText.setVisible(false);
-                passwordText.setVisible(false);
-                
-                Success.setText("Log-in Successful");
-                userText.setText("");
-                passwordText.setText("");
-            }
-            else
-            {
-                Error.setText("Incorrect Username/Password, Try again!");
-                userText.setText("");
-                passwordText.setText("");
-            }
+                try{
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");                 
+                    String sql = "SELECT * FROM `account` WHERE Username=? AND Passwd=?";
+                    PreparedStatement pst = con.prepareStatement(sql);
+                    pst.setString(1, user);
+                    pst.setString(2,password);
+                    ResultSet rs = pst.executeQuery();
+                    
+                    if(rs.next()){
+                        Login.setVisible(false);
+                        Login.setEnabled(false);
+                    
+                        Welcome.setVisible(true);
+                    
+                        Acc.setText(user);
+                        Acc.setFont(new Font("Arial", Font.BOLD, 17));
+                        Acc.setBounds(80, 215, 145, 35);
+                        Acc.setVisible(true);
+                    
+                        Ok.setVisible(true);
+                        Ok.requestFocusInWindow();
+                    
+                        userLabel.setVisible(false);
+                        passwordLabel.setVisible(false);
+                        userText.setVisible(false);
+                        passwordText.setVisible(false);
+                        
+                        Success.setText("Log-in Successful");
+                        userText.setText("");
+                        passwordText.setText("");
+                    }else {
+                            
+                             Error.setText("Incorrect Username/Password, Try again!");
+                        userText.setText("");
+                        passwordText.setText("");
+                    }
+                    con.close();
+                }catch(Exception ex){
+                    JOptionPane.showMessageDialog(null,ex);
+                }
+                /* if(user.equals(accs.get(0).get(0)) && password.equals(accs.get(0).get(1)))
+                {
+                    Login.setVisible(false);
+                    Login.setEnabled(false);
+                    
+                    Welcome.setVisible(true);
+                    
+                    Acc.setText("Staff");
+                    Acc.setFont(new Font("Arial", Font.BOLD, 17));
+                    Acc.setBounds(115, 215, 145, 35);
+                    Acc.setVisible(true);
+                    
+                    Ok.setVisible(true);
+                    Ok.requestFocusInWindow();
+                    
+                    userLabel.setVisible(false);
+                    passwordLabel.setVisible(false);
+                    userText.setVisible(false);
+                    passwordText.setVisible(false);
+                    
+                    Success.setText("Log-in Successful");
+                    userText.setText("");
+                    passwordText.setText("");
+                }
+                else if(user.equals(accs.get(1).get(0)) && password.equals(accs.get(1).get(1)))
+                {
+                    Login.setVisible(false);
+                    Login.setEnabled(false);
+                    
+                    Welcome.setVisible(true);
+                    
+                    Acc.setText("Supervisor");
+                    Acc.setFont(new Font("Arial", Font.BOLD, 20));
+                    Acc.setBounds(80, 215, 145, 35);
+                    Acc.setVisible(true);
+                    
+                    Ok.setVisible(true);
+                    Ok.requestFocusInWindow();
+                    
+                    userLabel.setVisible(false);
+                    passwordLabel.setVisible(false);
+                    userText.setVisible(false);
+                    passwordText.setVisible(false);
+                    
+                    Success.setText("Log-in Successful");
+                    userText.setText("");
+                    passwordText.setText("");
+                }
+                else
+                {
+                    Error.setText("Incorrect Username/Password, Try again!");
+                    userText.setText("");
+                    passwordText.setText("");
+                } */
             }  
         });
         Panel.add(Login);
