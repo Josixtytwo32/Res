@@ -890,7 +890,7 @@ public class MainWindow
         
         JButton BuyRemove = new JButton("Remove");
         
-        BuyFillUpBar.setBounds(70,150,285,25);
+        BuyFillUpBar.setBounds(70,140,285,25);
         BuyFillUpBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyFillUpBar.setHorizontalAlignment(SwingConstants.CENTER);
         BuyFillUpBar.setOpaque(false);
@@ -898,40 +898,40 @@ public class MainWindow
         
         BuyProductCode.setFont(new Font("Arial", Font.BOLD, 12));
         BuyProductCode.setForeground(Color.BLACK);
-        BuyProductCode.setBounds(107,195,150,25);
+        BuyProductCode.setBounds(107,185,150,25);
         BuyProductCode.setOpaque(false);
         BuyProductCode.setVisible(false);
-        BuyProductCodeBar.setBounds(195,195,160,25);
+        BuyProductCodeBar.setBounds(195,185,160,25);
         BuyProductCodeBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyProductCodeBar.setOpaque(false);
         BuyProductCodeBar.setVisible(false);
         
         BuyItemDescription.setFont(new Font("Arial", Font.BOLD, 12));
         BuyItemDescription.setForeground(Color.BLACK);
-        BuyItemDescription.setBounds(90,230,150,25);
+        BuyItemDescription.setBounds(90,220,150,25);
         BuyItemDescription.setOpaque(false);
         BuyItemDescription.setVisible(false);
-        BuyItemDescriptionBar.setBounds(195,230,160,25);
+        BuyItemDescriptionBar.setBounds(195,220,160,25);
         BuyItemDescriptionBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyItemDescriptionBar.setOpaque(false);
         BuyItemDescriptionBar.setVisible(false);
         
         RecNo.setFont(new Font("Arial", Font.BOLD, 12));
         RecNo.setForeground(Color.BLACK);
-        RecNo.setBounds(115,265,150,25);
+        RecNo.setBounds(115,255,150,25);
         RecNo.setOpaque(false);
         RecNo.setVisible(false);
-        RecNoBar.setBounds(195,265,160,25);
+        RecNoBar.setBounds(195,255,160,25);
         RecNoBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         RecNoBar.setOpaque(false);
         RecNoBar.setVisible(false);
         
         BuyPrice.setFont(new Font("Arial", Font.BOLD, 12));
         BuyPrice.setForeground(Color.BLACK);
-        BuyPrice.setBounds(132,300,150,25);
+        BuyPrice.setBounds(132,290,150,25);
         BuyPrice.setOpaque(false);
         BuyPrice.setVisible(false);
-        BuyPriceBar.setBounds(195,300,160,25);
+        BuyPriceBar.setBounds(195,290,160,25);
         BuyPriceBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyPriceBar.setOpaque(false);
         BuyPriceBar.setVisible(false);
