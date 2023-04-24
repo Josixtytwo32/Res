@@ -28,10 +28,11 @@ public class MainWindow
     
         String productcode = tf[0].getText();
         String itemdescription = tf[1].getText();
-        int updateV = Integer.valueOf(tf[2].getText());
-        int cc =  Integer.valueOf("" + vals[0][3].toString());
         
-        if (!productcode.equals("") && !itemdescription.equals("")) {
+        if (!productcode.equals("") && !itemdescription.equals("") && !tf[2].getText().equals("")) {
+            int updateV = Integer.valueOf(tf[2].getText());
+            int cc =  Integer.valueOf("" + vals[0][3].toString());
+            
             try { 
             String query = "update sql12600942.inventory set Quantity = '" + (cc + updateV) + "', Amount = '" + ((float) (cc + updateV) * Float.parseFloat(vals[0][4].toString())) + "' where ProductCode = '" + productcode + "';";
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -106,6 +107,7 @@ public class MainWindow
             try { 
                 String query = "DELETE FROM inventory WHERE `inventory`.`ProductCode` = ProdCode";
                 Class.forName("com.mysql.cj.jdbc.Driver");
+                System.out.println(query);
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
                 Statement pst = con.createStatement();
                 pst.executeUpdate(query);
@@ -173,7 +175,7 @@ public class MainWindow
     public Object[][] getTable(String cell) {
         String query = "select * from sql12600942.inventory where Product Category = '" + cell + "';";        
         ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
-       
+        System.out.println();
         int rowCount = 10;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -307,7 +309,7 @@ public class MainWindow
         public Object[][] getTableBuy() {
         String query = "select * from buytable AS bt, inventory AS inv WHERE bt.ProductCode = inv.ProductCode;";
         
-        ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
+            ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
         
         int rowCount = 1;
         try {
@@ -320,7 +322,7 @@ public class MainWindow
                     ArrayList<Object> arry = new ArrayList<Object>();
                     arry.add(rs.getInt("BuyID"));
                     arry.add(rs.getString("Customersname"));
-                    arry.add(rs.getString("Product Code"));
+                    arry.add(rs.getString("ProductCode"));
                     arry.add(rs.getString("inv.Item Description"));
                     arry.add(rs.getInt("Quantity"));
                     arry.add(rs.getBigDecimal("inv.Unit Price"));
@@ -408,7 +410,7 @@ public class MainWindow
         JLabel Search = new JLabel("Search:");
         JLabel ProductCode = new JLabel("Product Code:");
         JLabel ItemDescription = new JLabel("Item Description:");
-        JLabel StockToAdd = new JLabel("Quantity to Add:");
+        JLabel StockToAdd = new JLabel("Stock to Add:");
         
         JButton Inventory = new JButton(ii);
         JButton Transac = new JButton(ti);
@@ -504,7 +506,7 @@ public class MainWindow
         });
         
         JTable Lamisa = new JTable(); 
-        Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));
+        Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Stock", "Unit Price", "Amount"}));
         Lamisa.getColumnModel().getColumn(2).setPreferredWidth(220);
         Lamisa.getColumnModel().getColumn(4).setPreferredWidth(50);
         Lamisa.getColumnModel().getColumn(5).setPreferredWidth(50);
@@ -627,7 +629,7 @@ public class MainWindow
         
         StockToAdd.setFont(new Font("Arial", Font.BOLD, 12));
         StockToAdd.setForeground(Color.BLACK);
-        StockToAdd.setBounds(170,510,150,25);
+        StockToAdd.setBounds(168,510,150,25);
         StockToAdd.setOpaque(false);
         StockToAddBar.setBounds(265,510,150,25);
         StockToAddBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -890,7 +892,7 @@ public class MainWindow
         
         JButton BuyRemove = new JButton("Remove");
         
-        BuyFillUpBar.setBounds(70,140,285,25);
+        BuyFillUpBar.setBounds(70,150,285,25);
         BuyFillUpBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyFillUpBar.setHorizontalAlignment(SwingConstants.CENTER);
         BuyFillUpBar.setOpaque(false);
@@ -898,40 +900,40 @@ public class MainWindow
         
         BuyProductCode.setFont(new Font("Arial", Font.BOLD, 12));
         BuyProductCode.setForeground(Color.BLACK);
-        BuyProductCode.setBounds(107,185,150,25);
+        BuyProductCode.setBounds(107,195,150,25);
         BuyProductCode.setOpaque(false);
         BuyProductCode.setVisible(false);
-        BuyProductCodeBar.setBounds(195,185,160,25);
+        BuyProductCodeBar.setBounds(195,195,160,25);
         BuyProductCodeBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyProductCodeBar.setOpaque(false);
         BuyProductCodeBar.setVisible(false);
         
         BuyItemDescription.setFont(new Font("Arial", Font.BOLD, 12));
         BuyItemDescription.setForeground(Color.BLACK);
-        BuyItemDescription.setBounds(90,220,150,25);
+        BuyItemDescription.setBounds(90,230,150,25);
         BuyItemDescription.setOpaque(false);
         BuyItemDescription.setVisible(false);
-        BuyItemDescriptionBar.setBounds(195,220,160,25);
+        BuyItemDescriptionBar.setBounds(195,230,160,25);
         BuyItemDescriptionBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyItemDescriptionBar.setOpaque(false);
         BuyItemDescriptionBar.setVisible(false);
         
         RecNo.setFont(new Font("Arial", Font.BOLD, 12));
         RecNo.setForeground(Color.BLACK);
-        RecNo.setBounds(115,255,150,25);
+        RecNo.setBounds(115,265,150,25);
         RecNo.setOpaque(false);
         RecNo.setVisible(false);
-        RecNoBar.setBounds(195,255,160,25);
+        RecNoBar.setBounds(195,265,160,25);
         RecNoBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         RecNoBar.setOpaque(false);
         RecNoBar.setVisible(false);
         
         BuyPrice.setFont(new Font("Arial", Font.BOLD, 12));
         BuyPrice.setForeground(Color.BLACK);
-        BuyPrice.setBounds(132,290,150,25);
+        BuyPrice.setBounds(132,300,150,25);
         BuyPrice.setOpaque(false);
         BuyPrice.setVisible(false);
-        BuyPriceBar.setBounds(195,290,160,25);
+        BuyPriceBar.setBounds(195,300,160,25);
         BuyPriceBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyPriceBar.setOpaque(false);
         BuyPriceBar.setVisible(false);
@@ -957,59 +959,59 @@ public class MainWindow
                insertUpdate(e);
             }
             public void changedUpdate(DocumentEvent e) {
-                
+                System.out.println(e);
             }
         });
         
         BuyQuantity.setFont(new Font("Arial", Font.BOLD, 12));
         BuyQuantity.setForeground(Color.BLACK);
-        BuyQuantity.setBounds(140,325,150,25);
+        BuyQuantity.setBounds(140,335,150,25);
         BuyQuantity.setOpaque(false);
         BuyQuantity.setVisible(false);
-        BuyQuantityBar.setBounds(195,325,160,25);
+        BuyQuantityBar.setBounds(195,335,160,25);
         BuyQuantityBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyQuantityBar.setOpaque(false);
         BuyQuantityBar.setVisible(false);
         
         BuyCustomersName.setFont(new Font("Arial", Font.BOLD, 12));
         BuyCustomersName.setForeground(Color.BLACK);
-        BuyCustomersName.setBounds(145,360,150,25);
+        BuyCustomersName.setBounds(145,370,150,25);
         BuyCustomersName.setOpaque(false);
         BuyCustomersName.setVisible(false);
-        BuyCustomersNameBar.setBounds(195,360,160,25);
+        BuyCustomersNameBar.setBounds(195,370,160,25);
         BuyCustomersNameBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyCustomersNameBar.setOpaque(false);
         BuyCustomersNameBar.setVisible(false);
         
         BuyDate.setFont(new Font("Arial", Font.BOLD, 12));
         BuyDate.setForeground(Color.BLACK);
-        BuyDate.setBounds(90,395,150,25);
+        BuyDate.setBounds(90,405,150,25);
         BuyDate.setOpaque(false);
         BuyDate.setVisible(false);
-        BuyDateBar.setBounds(195,395,160,25);
+        BuyDateBar.setBounds(195,405,160,25);
         BuyDateBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyDateBar.setOpaque(false);
         BuyDateBar.setVisible(false);
         
-        BuyAdd.setBounds(70, 435, 80, 40);
+        BuyAdd.setBounds(70, 450, 80, 40);
         BuyAdd.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyAdd.setContentAreaFilled(false);
         BuyAdd.setOpaque(false);
         BuyAdd.setVisible(false);
         
-        BuyCalculate.setBounds(173, 435, 80, 40);
+        BuyCalculate.setBounds(173, 450, 80, 40);
         BuyCalculate.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyCalculate.setContentAreaFilled(false);
         BuyCalculate.setOpaque(false);
         BuyCalculate.setVisible(false);
         
-        BuyClear.setBounds(72, 485, 280, 40);
+        BuyClear.setBounds(70, 500, 280, 40);
         BuyClear.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyClear.setContentAreaFilled(false);
         BuyClear.setOpaque(false);
         BuyClear.setVisible(false);
         
-        BuyRemove.setBounds(275, 435, 80, 40);
+        BuyRemove.setBounds(275, 450, 80, 40);
         BuyRemove.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyRemove.setContentAreaFilled(false);
         BuyRemove.setOpaque(false);
@@ -1112,41 +1114,7 @@ public class MainWindow
         });
         
         // Conditioning of accounts
-        if (acc.getText().equals("Supervisor"))
-        {
-            Account.setFont(new Font("Arial", Font.BOLD, 15));
-            Account.setForeground(Color.WHITE);
-            Account.setBounds(700,10,100,50);
-            Account.setOpaque(false);
-            BuyRemove.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                
-                        int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
-                        if (stat==0){
-                            int rowIndex = BuyTable.getSelectedRow();
-
-                            String value = BuyTable.getModel().getValueAt(rowIndex, 1).toString();
-
-                            String query = "DELETE FROM buytable WHERE `buytable`.`BuyID` = '"+value+"'";
-                            try{
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
-                                Statement pst = con.createStatement();
-                                pst.executeUpdate(query);
-
-                                DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
-                                model.removeRow(rowIndex);
-                            }
-                            catch(ClassNotFoundException | SQLException ex){
-                                JOptionPane.showMessageDialog(null, "Error: "+ex);
-                            }
-                            updates(getTable(BuyProductCodeBar.getText(), true), Lamisa, BuyProductCodeBar, BuyItemDescriptionBar, BuyQuantityBar);
-                    }
-                }
-            });
-        }
-        else
+        if (acc.getText().equals("Staff"))
         {
             Account.setFont(new Font("Arial", Font.BOLD, 15));
             Account.setForeground(Color.WHITE);
@@ -1182,6 +1150,8 @@ public class MainWindow
                     dialog.dispose();
                     break;
                     }
+                    
+                            
                     String username = usernameField.getText();
                     String password = new String(passwordField.getPassword());
                     if (username.equals("Supervisor") && password.equals("123")) {
@@ -1190,6 +1160,7 @@ public class MainWindow
                             int rowIndex = BuyTable.getSelectedRow();
 
                             String value = BuyTable.getModel().getValueAt(rowIndex, 1).toString();
+                            System.out.println(value);
 
                             String query = "DELETE FROM buytable WHERE `buytable`.`BuyID` = '"+value+"'";
                             try{
@@ -1200,18 +1171,12 @@ public class MainWindow
 
                                 DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
                                 model.removeRow(rowIndex);
-                
-                                 BuyFillUpBar.setText("");
-                                 BuyProductCodeBar.setText("");
-                                 BuyItemDescriptionBar.setText("");
-                                 RecNoBar.setText("");
-                                 BuyPriceBar.setText("");
-                                 BuyQuantityBar.setText("");
-                                 BuyCustomersNameBar.setText("");
-                                 BuyDateBar.setText("");
                             }
                             catch(ClassNotFoundException | SQLException ex){
                                 JOptionPane.showMessageDialog(null, "Error: "+ex);
+                            }
+                            catch (Exception ee) {
+                                ee.printStackTrace();
                             }
                         }
                         dialog.dispose();
@@ -1223,6 +1188,46 @@ public class MainWindow
                         usernameField.setText("");
                         passwordField.setText("");
                         }
+                    }
+                }
+            });
+        }
+        else
+        {
+            Account.setFont(new Font("Arial", Font.BOLD, 15));
+            Account.setForeground(Color.WHITE);
+            Account.setBounds(700,10,100,50);
+            Account.setOpaque(false);
+            BuyRemove.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    
+                    int rowIndexs = BuyTable.getSelectedRow();
+
+                            String values = BuyTable.getModel().getValueAt(rowIndexs, 1).toString();
+                            System.out.println(values);
+                     
+                
+                        int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+                        if (stat==0){
+                            int rowIndex = BuyTable.getSelectedRow();
+
+                            String value = BuyTable.getModel().getValueAt(rowIndex, 1).toString();
+
+                            String query = "DELETE FROM buytable WHERE `Customersname` = '"+value+"'";
+                            try{
+                                Class.forName("com.mysql.cj.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                                Statement pst = con.createStatement();
+                                pst.executeUpdate(query);
+
+                                DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
+                                model.removeRow(rowIndex);
+                            }
+                            catch(ClassNotFoundException | SQLException ex){
+                                JOptionPane.showMessageDialog(null, "Error: "+ex);
+                            }
+                            updates(getTable(BuyProductCodeBar.getText(), true), Lamisa, BuyProductCodeBar, BuyItemDescriptionBar, BuyQuantityBar);
                     }
                 }
             });
@@ -1350,7 +1355,7 @@ public class MainWindow
             public void actionPerformed(ActionEvent e)
             {
                 if (e.getSource() == Buy){
-                    BTable.setBounds(380,130,480,370);
+                    BTable.setBounds(380,130,470,350);
                 }
                 AddNewItem.setVisible(false);
                 TypeOfMaterial.setVisible(false);
