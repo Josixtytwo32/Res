@@ -121,6 +121,8 @@ public LoginWindow()
         passwordText.setBackground(Color.GRAY);
         passwordText.setForeground(Color.WHITE);
         passwordText.setBorder(BorderFactory.createMatteBorder(0,0,0,0,Color.WHITE));
+    
+        
         
         userText.addActionListener(new ActionListener() {
             @Override
@@ -152,48 +154,55 @@ public LoginWindow()
                 Error.setText("");
                 Success.setText("");
                 
-                
-                try{
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");                 
-                    String sql = "SELECT * FROM `account` WHERE Username=? AND Passwd=?";
-                    PreparedStatement pst = con.prepareStatement(sql);
-                    pst.setString(1, user);
-                    pst.setString(2,password);
-                    ResultSet rs = pst.executeQuery();
+                if (user.equals("") && password.equals("")){
+                    JOptionPane.showMessageDialog(null, "Please enter your username and password","Error", JOptionPane.WARNING_MESSAGE);
+                }else{
                     
-                    if(rs.next()){
-                        Login.setVisible(false);
-                        Login.setEnabled(false);
-                    
-                        Welcome.setVisible(true);
-                    
-                        Acc.setText(user);
-                        Acc.setFont(new Font("Arial", Font.BOLD, 17));
-                        Acc.setBounds(80, 215, 145, 35);
-                        Acc.setVisible(true);
-                    
-                        Ok.setVisible(true);
-                        Ok.requestFocusInWindow();
-                    
-                        userLabel.setVisible(false);
-                        passwordLabel.setVisible(false);
-                        userText.setVisible(false);
-                        passwordText.setVisible(false);
+                        try{
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");                 
+                            String sql = "SELECT * FROM `account` WHERE Username=? AND Passwd=?";
+                            PreparedStatement pst = con.prepareStatement(sql);
+                            pst.setString(1, user);
+                            pst.setString(2,password);
+                            ResultSet rs = pst.executeQuery();
                         
-                        Success.setText("Log-in Successful");
-                        userText.setText("");
-                        passwordText.setText("");
-                    }else {
+                            if(rs.next()){
+                                Login.setVisible(false);
+                                Login.setEnabled(false);
                             
-                             Error.setText("Incorrect Username/Password, Try again!");
-                        userText.setText("");
-                        passwordText.setText("");
-                    }
-                    con.close();
-                }catch(Exception ex){
-                    JOptionPane.showMessageDialog(null,ex);
+                                Welcome.setVisible(true);
+                            
+                                Acc.setText(user);
+                                Acc.setFont(new Font("Arial", Font.BOLD, 17));
+                                Acc.setBounds(80, 215, 145, 35);
+                                Acc.setVisible(true);
+                            
+                                Ok.setVisible(true);
+                                Ok.requestFocusInWindow();
+                            
+                                userLabel.setVisible(false);
+                                passwordLabel.setVisible(false);
+                                userText.setVisible(false);
+                                passwordText.setVisible(false);
+                                
+                                Success.setText("Log-in Successful");
+                                userText.setText("");
+                                passwordText.setText("");
+                            }else {
+                                    
+                                     Error.setText("Incorrect Username/Password, Try again!");
+                                userText.setText("");
+                                passwordText.setText("");
+                            }
+                            con.close();
+                        }catch(Exception ex){
+                            JOptionPane.showMessageDialog(null,ex);
+                        }
                 }
+                
+                
+                
             }
             
         });
@@ -218,46 +227,51 @@ public LoginWindow()
                 Success.setText("");
                 
                 
-                try{
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");                 
-                    String sql = "SELECT * FROM `account` WHERE Username=? AND Passwd=?";
-                    PreparedStatement pst = con.prepareStatement(sql);
-                    pst.setString(1, user);
-                    pst.setString(2,password);
-                    ResultSet rs = pst.executeQuery();
+                if (user.equals("") && password.equals("")){
+                    JOptionPane.showMessageDialog(null, "Please enter your username and password","Error", JOptionPane.WARNING_MESSAGE);
+                }else{
                     
-                    if(rs.next()){
-                        Login.setVisible(false);
-                        Login.setEnabled(false);
-                    
-                        Welcome.setVisible(true);
-                    
-                        Acc.setText(user);
-                        Acc.setFont(new Font("Arial", Font.BOLD, 17));
-                        Acc.setBounds(80, 215, 145, 35);
-                        Acc.setVisible(true);
-                    
-                        Ok.setVisible(true);
-                        Ok.requestFocusInWindow();
-                    
-                        userLabel.setVisible(false);
-                        passwordLabel.setVisible(false);
-                        userText.setVisible(false);
-                        passwordText.setVisible(false);
+                        try{
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");                 
+                            String sql = "SELECT * FROM `account` WHERE Username=? AND Passwd=?";
+                            PreparedStatement pst = con.prepareStatement(sql);
+                            pst.setString(1, user);
+                            pst.setString(2,password);
+                            ResultSet rs = pst.executeQuery();
                         
-                        Success.setText("Log-in Successful");
-                        userText.setText("");
-                        passwordText.setText("");
-                    }else {
+                            if(rs.next()){
+                                Login.setVisible(false);
+                                Login.setEnabled(false);
                             
-                             Error.setText("Incorrect Username/Password, Try again!");
-                        userText.setText("");
-                        passwordText.setText("");
-                    }
-                    con.close();
-                }catch(Exception ex){
-                    JOptionPane.showMessageDialog(null,ex);
+                                Welcome.setVisible(true);
+                            
+                                Acc.setText(user);
+                                Acc.setFont(new Font("Arial", Font.BOLD, 17));
+                                Acc.setBounds(80, 215, 145, 35);
+                                Acc.setVisible(true);
+                            
+                                Ok.setVisible(true);
+                                Ok.requestFocusInWindow();
+                            
+                                userLabel.setVisible(false);
+                                passwordLabel.setVisible(false);
+                                userText.setVisible(false);
+                                passwordText.setVisible(false);
+                                
+                                Success.setText("Log-in Successful");
+                                userText.setText("");
+                                passwordText.setText("");
+                            }else {
+                                    
+                                     Error.setText("Incorrect Username/Password, Try again!");
+                                userText.setText("");
+                                passwordText.setText("");
+                            }
+                            con.close();
+                        }catch(Exception ex){
+                            JOptionPane.showMessageDialog(null,ex);
+                        }
                 }
                 /* if(user.equals(accs.get(0).get(0)) && password.equals(accs.get(0).get(1)))
                 {
