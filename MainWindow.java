@@ -408,7 +408,7 @@ public class MainWindow
         JLabel Search = new JLabel("Search:");
         JLabel ProductCode = new JLabel("Product Code:");
         JLabel ItemDescription = new JLabel("Item Description:");
-        JLabel StockToAdd = new JLabel("Stock to Add:");
+        JLabel StockToAdd = new JLabel("Quantity to Add:");
         
         JButton Inventory = new JButton(ii);
         JButton Transac = new JButton(ti);
@@ -504,7 +504,7 @@ public class MainWindow
         });
         
         JTable Lamisa = new JTable(); 
-        Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Stock", "Unit Price", "Amount"}));
+        Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));
         Lamisa.getColumnModel().getColumn(2).setPreferredWidth(220);
         Lamisa.getColumnModel().getColumn(4).setPreferredWidth(50);
         Lamisa.getColumnModel().getColumn(5).setPreferredWidth(50);
@@ -627,7 +627,7 @@ public class MainWindow
         
         StockToAdd.setFont(new Font("Arial", Font.BOLD, 12));
         StockToAdd.setForeground(Color.BLACK);
-        StockToAdd.setBounds(168,510,150,25);
+        StockToAdd.setBounds(170,510,150,25);
         StockToAdd.setOpaque(false);
         StockToAddBar.setBounds(265,510,150,25);
         StockToAddBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -963,53 +963,53 @@ public class MainWindow
         
         BuyQuantity.setFont(new Font("Arial", Font.BOLD, 12));
         BuyQuantity.setForeground(Color.BLACK);
-        BuyQuantity.setBounds(140,335,150,25);
+        BuyQuantity.setBounds(140,325,150,25);
         BuyQuantity.setOpaque(false);
         BuyQuantity.setVisible(false);
-        BuyQuantityBar.setBounds(195,335,160,25);
+        BuyQuantityBar.setBounds(195,325,160,25);
         BuyQuantityBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyQuantityBar.setOpaque(false);
         BuyQuantityBar.setVisible(false);
         
         BuyCustomersName.setFont(new Font("Arial", Font.BOLD, 12));
         BuyCustomersName.setForeground(Color.BLACK);
-        BuyCustomersName.setBounds(145,370,150,25);
+        BuyCustomersName.setBounds(145,360,150,25);
         BuyCustomersName.setOpaque(false);
         BuyCustomersName.setVisible(false);
-        BuyCustomersNameBar.setBounds(195,370,160,25);
+        BuyCustomersNameBar.setBounds(195,360,160,25);
         BuyCustomersNameBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyCustomersNameBar.setOpaque(false);
         BuyCustomersNameBar.setVisible(false);
         
         BuyDate.setFont(new Font("Arial", Font.BOLD, 12));
         BuyDate.setForeground(Color.BLACK);
-        BuyDate.setBounds(90,405,150,25);
+        BuyDate.setBounds(90,395,150,25);
         BuyDate.setOpaque(false);
         BuyDate.setVisible(false);
-        BuyDateBar.setBounds(195,405,160,25);
+        BuyDateBar.setBounds(195,395,160,25);
         BuyDateBar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyDateBar.setOpaque(false);
         BuyDateBar.setVisible(false);
         
-        BuyAdd.setBounds(70, 450, 80, 40);
+        BuyAdd.setBounds(70, 435, 80, 40);
         BuyAdd.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyAdd.setContentAreaFilled(false);
         BuyAdd.setOpaque(false);
         BuyAdd.setVisible(false);
         
-        BuyCalculate.setBounds(173, 450, 80, 40);
+        BuyCalculate.setBounds(173, 435, 80, 40);
         BuyCalculate.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyCalculate.setContentAreaFilled(false);
         BuyCalculate.setOpaque(false);
         BuyCalculate.setVisible(false);
         
-        BuyClear.setBounds(70, 500, 280, 40);
+        BuyClear.setBounds(72, 485, 280, 40);
         BuyClear.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyClear.setContentAreaFilled(false);
         BuyClear.setOpaque(false);
         BuyClear.setVisible(false);
         
-        BuyRemove.setBounds(275, 450, 80, 40);
+        BuyRemove.setBounds(275, 435, 80, 40);
         BuyRemove.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         BuyRemove.setContentAreaFilled(false);
         BuyRemove.setOpaque(false);
@@ -1350,7 +1350,7 @@ public class MainWindow
             public void actionPerformed(ActionEvent e)
             {
                 if (e.getSource() == Buy){
-                    BTable.setBounds(380,130,470,350);
+                    BTable.setBounds(380,130,480,370);
                 }
                 AddNewItem.setVisible(false);
                 TypeOfMaterial.setVisible(false);
