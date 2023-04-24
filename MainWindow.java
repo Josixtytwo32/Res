@@ -106,7 +106,6 @@ public class MainWindow
             try { 
                 String query = "DELETE FROM inventory WHERE `inventory`.`ProductCode` = ProdCode";
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                System.out.println(query);
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
                 Statement pst = con.createStatement();
                 pst.executeUpdate(query);
@@ -174,7 +173,7 @@ public class MainWindow
     public Object[][] getTable(String cell) {
         String query = "select * from sql12600942.inventory where Product Category = '" + cell + "';";        
         ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
-        System.out.println();
+       
         int rowCount = 10;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -958,7 +957,7 @@ public class MainWindow
                insertUpdate(e);
             }
             public void changedUpdate(DocumentEvent e) {
-                System.out.println(e);
+                
             }
         });
         
@@ -1113,7 +1112,41 @@ public class MainWindow
         });
         
         // Conditioning of accounts
-        if (acc.getText().equals("Staff"))
+        if (acc.getText().equals("Supervisor"))
+        {
+            Account.setFont(new Font("Arial", Font.BOLD, 15));
+            Account.setForeground(Color.WHITE);
+            Account.setBounds(700,10,100,50);
+            Account.setOpaque(false);
+            BuyRemove.addActionListener(new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                
+                        int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+                        if (stat==0){
+                            int rowIndex = BuyTable.getSelectedRow();
+
+                            String value = BuyTable.getModel().getValueAt(rowIndex, 1).toString();
+
+                            String query = "DELETE FROM buytable WHERE `buytable`.`BuyID` = '"+value+"'";
+                            try{
+                                Class.forName("com.mysql.cj.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                                Statement pst = con.createStatement();
+                                pst.executeUpdate(query);
+
+                                DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
+                                model.removeRow(rowIndex);
+                            }
+                            catch(ClassNotFoundException | SQLException ex){
+                                JOptionPane.showMessageDialog(null, "Error: "+ex);
+                            }
+                            updates(getTable(BuyProductCodeBar.getText(), true), Lamisa, BuyProductCodeBar, BuyItemDescriptionBar, BuyQuantityBar);
+                    }
+                }
+            });
+        }
+        else
         {
             Account.setFont(new Font("Arial", Font.BOLD, 15));
             Account.setForeground(Color.WHITE);
@@ -1167,6 +1200,15 @@ public class MainWindow
 
                                 DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
                                 model.removeRow(rowIndex);
+                
+                                 BuyFillUpBar.setText("");
+                                 BuyProductCodeBar.setText("");
+                                 BuyItemDescriptionBar.setText("");
+                                 RecNoBar.setText("");
+                                 BuyPriceBar.setText("");
+                                 BuyQuantityBar.setText("");
+                                 BuyCustomersNameBar.setText("");
+                                 BuyDateBar.setText("");
                             }
                             catch(ClassNotFoundException | SQLException ex){
                                 JOptionPane.showMessageDialog(null, "Error: "+ex);
@@ -1181,40 +1223,6 @@ public class MainWindow
                         usernameField.setText("");
                         passwordField.setText("");
                         }
-                    }
-                }
-            });
-        }
-        else
-        {
-            Account.setFont(new Font("Arial", Font.BOLD, 15));
-            Account.setForeground(Color.WHITE);
-            Account.setBounds(700,10,100,50);
-            Account.setOpaque(false);
-            BuyRemove.addActionListener(new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                
-                        int stat=JOptionPane.showConfirmDialog(null,"Are you sure you want to remove the item?", "Remove Item",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
-                        if (stat==0){
-                            int rowIndex = BuyTable.getSelectedRow();
-
-                            String value = BuyTable.getModel().getValueAt(rowIndex, 1).toString();
-
-                            String query = "DELETE FROM buytable WHERE `buytable`.`BuyID` = '"+value+"'";
-                            try{
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
-                                Statement pst = con.createStatement();
-                                pst.executeUpdate(query);
-
-                                DefaultTableModel model = (DefaultTableModel)BuyTable.getModel();
-                                model.removeRow(rowIndex);
-                            }
-                            catch(ClassNotFoundException | SQLException ex){
-                                JOptionPane.showMessageDialog(null, "Error: "+ex);
-                            }
-                            updates(getTable(BuyProductCodeBar.getText(), true), Lamisa, BuyProductCodeBar, BuyItemDescriptionBar, BuyQuantityBar);
                     }
                 }
             });
