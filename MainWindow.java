@@ -173,9 +173,10 @@ public class MainWindow
         }
 
     public Object[][] getTable(String cell) {
-        String query = "select * from sql12600942.inventory where Product Category = '" + cell + "';";        
+        System.out.println(cell + "WTF");
+        String query = "select * from sql12600942.inventory where `Product Category` = '" + cell + "';";        
         ArrayList<ArrayList<Object>> arryB = new ArrayList<ArrayList<Object>>();
-        System.out.println();
+        
         int rowCount = 10;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -590,9 +591,11 @@ public class MainWindow
         {
             public void actionPerformed(ActionEvent e) {
                 String cats = (String) Category.getItemAt(Category.getSelectedIndex());
+                
                 if (cats.equals("All")) {
                 Lamisa.setModel(new DefaultTableModel(getTable(), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));   
                 } else {
+                    
                 Lamisa.setModel(new DefaultTableModel(getTable(cats), new String[]{"ProductCode", "Product Category", "Item Description", "Quantity", "Unit Price", "Amount"}));
                 }
             }
@@ -684,6 +687,8 @@ public class MainWindow
         TransactionLogTable.getColumnModel().getColumn(4).setPreferredWidth(50);
         TransactionLogTable.getColumnModel().getColumn(5).setPreferredWidth(50);
         TransactionLogTable.setRowSelectionAllowed(true);
+        TransactionLogTable.getTableHeader().setReorderingAllowed(false);
+        TransactionLogTable.getTableHeader().setResizingAllowed(false);
         JScrollPane TransacLogTable = new JScrollPane(TransactionLogTable); 
         TransacLogTable.setBounds(30,160,830,320);
         TransacLogTable.setVisible(false);
@@ -742,6 +747,9 @@ public class MainWindow
         BuyTable.getColumnModel().getColumn(5).setPreferredWidth(50);
         BuyTable.getColumnModel().getColumn(6).setPreferredWidth(70);
         BuyTable.setRowSelectionAllowed(true);
+        BuyTable.getTableHeader().setReorderingAllowed(false);
+        BuyTable.getTableHeader().setResizingAllowed(false);
+        
         JScrollPane BTable = new JScrollPane(BuyTable); 
         BTable.setBounds(30,160,830,320);
         BTable.setVisible(false);
@@ -853,6 +861,26 @@ public class MainWindow
         
         BuyClear.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                DefaultTableModel modela = (DefaultTableModel) BuyTable.getModel();
+                
+                int rowCount = modela.getRowCount();
+                System.out.println(rowCount);
+                
+                for (int i_ = 0; i_ < rowCount; i_++) {
+                    String query = "DELETE FROM buytable WHERE `Customersname` = '"+ ((String) BuyTable.getValueAt(i_, 1)) +"'";
+                    System.out.println(query);
+                            try{
+                                Class.forName("com.mysql.cj.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/sql12600942","root","");
+                                Statement pst = con.createStatement();
+                                pst.executeUpdate(query);
+
+                            }
+                            catch(ClassNotFoundException | SQLException ex){
+                                JOptionPane.showMessageDialog(null, "Error: "+ex);
+                            }
+                }
+            
                 if (!BuyCustomersNameBar.getText().equals("") && !BuyFillUpBar.getText().equals("") && !BuyProductCodeBar.getText().equals("") && !BuyItemDescriptionBar.getText().equals("") && !RecNoBar.getText().equals("") && !BuyPriceBar.getText().equals("") && !BuyQuantityBar.getText().equals("") && !BuyDateBar.getText().equals("")){
                 DefaultTableModel model = (DefaultTableModel) TransactionLogTable.getModel();
                    // Object[] row = { BuyCustomersNameBar.getText(),BuyFillUpBar.getText(), BuyProductCodeBar.getText(), BuyItemDescriptionBar.getText(), RecNoBar.getText(), BuyPriceBar.getText(), 
@@ -865,7 +893,8 @@ public class MainWindow
                 ConnectDB cdb=new ConnectDB();
                 
               
-                cdb.Transaclog(BuyProductCodeBar.getText(), Integer.valueOf(RecNoBar.getText()));
+                // cdb.Transaclog(BuyProductCodeBar.getText(), Integer.valueOf(RecNoBar.getText()));
+
             }       
                 
                double sum = 0;
@@ -1020,6 +1049,9 @@ public class MainWindow
          // Users Account Section
         JTable UserAccountsTable = new JTable();
         UserAccountsTable.setModel(new DefaultTableModel(getTableUser(), new String[]{"Username","Passwd","AccType"}));
+        UserAccountsTable.setRowSelectionAllowed(true);
+        UserAccountsTable.getTableHeader().setReorderingAllowed(false);
+        UserAccountsTable.getTableHeader().setResizingAllowed(false);
         JScrollPane UserAndAccountsTable = new JScrollPane(UserAccountsTable);
         UserAndAccountsTable.setBounds(400,130,440,250);
         UserAndAccountsTable.setVisible(false);
